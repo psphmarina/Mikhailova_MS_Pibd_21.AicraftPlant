@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8CA3FD98-6CF8-4CF0-B849-0393B2ACFF48}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AircraftBuildingPlantServiceDAL</RootNamespace>
+    <AssemblyName>AircraftBuildingPlantServiceDAL</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BindingModel\AircraftBindingModel.cs" />
+    <Compile Include="BindingModel\AircraftElementBindingModel.cs" />
+    <Compile Include="BindingModel\AircraftOrderBindingModel.cs" />
+    <Compile Include="BindingModel\AircraftOrderStatusBindingModel.cs" />
+    <Compile Include="BindingModel\CustomerBindingModel.cs" />
+    <Compile Include="BindingModel\ElementBindingModel.cs" />
+    <Compile Include="BindingModel\WarehouseBindingModel.cs" />
+    <Compile Include="BindingModel\WarehouseElementBindingModel.cs" />
+    <Compile Include="Interfaces\IAircraftElementService.cs" />
+    <Compile Include="Interfaces\IAircraftService.cs" />
+    <Compile Include="Interfaces\ICustomertService.cs" />
+    <Compile Include="Interfaces\IElementService.cs" />
+    <Compile Include="Interfaces\IMainService.cs" />
+    <Compile Include="Interfaces\IWarehouseService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\AircraftElementViewModel.cs" />
+    <Compile Include="ViewModel\AircraftOrderStatusViewModel.cs" />
+    <Compile Include="ViewModel\AircraftOrderViewModel.cs" />
+    <Compile Include="ViewModel\AircraftViewModel.cs" />
+    <Compile Include="ViewModel\CustomerViewModel.cs" />
+    <Compile Include="ViewModel\ElementViewModel.cs" />
+    <Compile Include="ViewModel\WarehouseElementViewModel.cs" />
+    <Compile Include="ViewModel\WarehouseViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AircraftBuildingPlantModel\AircraftBuildingPlantModel.csproj">
+      <Project>{c944496e-ffec-4737-be24-b11c0daab708}</Project>
+      <Name>AircraftBuildingPlantModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
