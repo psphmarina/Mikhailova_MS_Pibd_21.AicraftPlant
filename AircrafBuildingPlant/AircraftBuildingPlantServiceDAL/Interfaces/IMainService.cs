@@ -15,5 +15,6 @@ namespace AircraftBuildingPlantServiceDAL.Interfaces
         void TakeOrderInWork(AircraftOrderBindingModel model);
         void FinishOrder(AircraftOrderBindingModel model);
         void PayOrder(AircraftOrderBindingModel model);
+        void PutElementOnWarehouse(WarehouseElementBindingModel model);
     }
 }

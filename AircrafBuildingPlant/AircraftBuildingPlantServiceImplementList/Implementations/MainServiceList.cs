@@ -19,53 +19,29 @@ namespace AircraftBuildingPlantServiceImplementList.Implementations
         }
         public List<AircraftOrderViewModel> GetList()
         {
-            List<AircraftOrderViewModel> result = new List<AircraftOrderViewModel>();
-            for (int i = 0; i < source.AircraftOrders.Count; ++i)
+            List<AircraftOrderViewModel> result = source.AircraftOrders
+            .Select(rec => new AircraftOrderViewModel
             {
-                string clientFIO = string.Empty;
-                for (int j = 0; j < source.Customers.Count; ++j)
-                {
-                    if (source.Customers[j].Id == source.AircraftOrders[i].CustomerId)
-                    {
-                        clientFIO = source.Customers[j].CustomerFIO;
-                        break;
-                    }
-                }
-                string productName = string.Empty;
-                for (int j = 0; j < source.Aircrafts.Count; ++j)
-                {
-                    if (source.Aircrafts[j].Id == source.AircraftOrders[i].AircraftId)
-                    {
-                        productName = source.Aircrafts[j].AircraftName;
-                        break;
-                    }
-                }
-                result.Add(new AircraftOrderViewModel
-                {
-                    Id = source.AircraftOrders[i].Id,
-                    CustomerId = source.AircraftOrders[i].CustomerId,
-                    CustomerFIO = clientFIO,
-                    AircraftId = source.AircraftOrders[i].AircraftId,
-                    AircraftName = productName,
-                    Count = source.AircraftOrders[i].Count,
-                    Sum = source.AircraftOrders[i].Sum,
-                    DateCreate = source.AircraftOrders[i].DateCreate.ToLongDateString(),
-                    DateImplement = source.AircraftOrders[i].DateImplement?.ToLongDateString(),
-                    Status = source.AircraftOrders[i].Status.ToString()
-                });
-            }
+                Id = rec.Id,
+                CustomerId = rec.CustomerId,
+                AircraftId = rec.AircraftId,
+                DateCreate = rec.DateCreate.ToLongDateString(),
+                DateImplement = rec.DateImplement?.ToLongDateString(),
+                Status = rec.Status.ToString(),
+                Count = rec.Count,
+                Sum = rec.Sum,
+                CustomerFIO = source.Customers.FirstOrDefault(recC => recC.Id ==
+                rec.CustomerId)?.CustomerFIO,
+                AircraftName = source.Aircrafts.FirstOrDefault(recP => recP.Id ==
+                rec.AircraftId)?.AircraftName,
+            })
+.ToList();
             return result;
         }
+
         public void CreateOrder(AircraftOrderBindingModel model)
         {
-            int maxId = 0;
-            for (int i = 0; i < source.AircraftOrders.Count; ++i)
-            {
-                if (source.AircraftOrders[i].Id > maxId)
-                {
-                    maxId = source.AircraftOrders[i].Id;
-                }
-            }
+            int maxId = source.AircraftOrders.Count > 0 ? source.AircraftOrders.Max(rec => rec.Id) : 0;
             source.AircraftOrders.Add(new AircraftOrder
             {
                 Id = maxId + 1,
@@ -77,69 +53,106 @@ namespace AircraftBuildingPlantServiceImplementList.Implementations
                 Status = AircraftOrderStatus.Принят
             });
         }
+
         public void TakeOrderInWork(AircraftOrderBindingModel model)
         {
-            int index = -1;
-            for (int i = 0; i < source.AircraftOrders.Count; ++i)
-            {
-                if (source.AircraftOrders[i].Id == model.Id)
-                {
-                    index = i;
-                    break;
-                }
-            }
-            if (index == -1)
+            AircraftOrder element = source.AircraftOrders.FirstOrDefault(rec => rec.Id == model.Id);
+            if (element == null)
             {
                 throw new Exception("Элемент не найден");
             }
-        if (source.AircraftOrders[index].Status != AircraftOrderStatus.Принят)
+            if (element.Status != AircraftOrderStatus.Принят)
             {
                 throw new Exception("Заказ не в статусе \"Принят\"");
             }
-            source.AircraftOrders[index].DateImplement = DateTime.Now;
-            source.AircraftOrders[index].Status = AircraftOrderStatus.Выполняется;
+            // смотрим по количеству компонентов на складах
+            var aircraftElements = source.AircraftElements.Where(rec => rec.AircraftId
+            == element.AircraftId);
+            foreach (var aircraftElement in aircraftElements)
+            {
+                int countOnWarehouses = source.WarehouseElements
+                .Where(rec => rec.ElementId == aircraftElement.ElementId)
+                .Sum(rec => rec.Count);
+                if (countOnWarehouses < aircraftElement.Count * element.Count)
+                {
+                    var componentName = source.Elements.FirstOrDefault(rec => rec.Id ==
+                    aircraftElement.ElementId);
+                    throw new Exception("Не достаточно компонента " +
+                    componentName?.ElementName + " требуется " + (aircraftElement.Count * element.Count) +
+                    ", в наличии " + countOnWarehouses);
+                }
+            }
+            // списываем
+            foreach (var aircraftElement in aircraftElements)
+            {
+                int countOnWarehouses = aircraftElement.Count * element.Count;
+                var warehouseElements = source.WarehouseElements.Where(rec => rec.ElementId
+                == aircraftElement.ElementId);
+                foreach (var warehouseElement in warehouseElements)
+                {
+                    // компонентов на одном слкаде может не хватать
+                    if (warehouseElement.Count >= countOnWarehouses)
+                    {
+                        warehouseElement.Count -= countOnWarehouses;
+                        break;
+                    }
+                    else
+                    {
+                        countOnWarehouses -= warehouseElement.Count;
+                        warehouseElement.Count = 0;
+                    }
+                }
+            }
+            element.DateImplement = DateTime.Now;
+            element.Status = AircraftOrderStatus.Выполняется;
         }
         public void FinishOrder(AircraftOrderBindingModel model)
         {
-            int index = -1;
-            for (int i = 0; i < source.AircraftOrders.Count; ++i)
-            {
-                if (source.AircraftOrders[i].Id == model.Id)
-                {
-                    index = i;
-                    break;
-                }
-            }
-            if (index == -1)
+            AircraftOrder element = source.AircraftOrders.FirstOrDefault(rec => rec.Id == model.Id);
+            if (element == null)
             {
                 throw new Exception("Элемент не найден");
             }
-            if (source.AircraftOrders[index].Status != AircraftOrderStatus.Выполняется)
+            if (element.Status != AircraftOrderStatus.Выполняется)
             {
                 throw new Exception("Заказ не в статусе \"Выполняется\"");
             }
-            source.AircraftOrders[index].Status = AircraftOrderStatus.Готов;
+            element.Status = AircraftOrderStatus.Готов;
         }
         public void PayOrder(AircraftOrderBindingModel model)
         {
-            int index = -1;
-            for (int i = 0; i < source.AircraftOrders.Count; ++i)
-            {
-                if (source.AircraftOrders[i].Id == model.Id)
-                {
-                    index = i;
-                    break;
-                }
-            }
-            if (index == -1)
+            AircraftOrder element = source.AircraftOrders.FirstOrDefault(rec => rec.Id == model.Id);
+            if (element == null)
             {
                 throw new Exception("Элемент не найден");
             }
-            if (source.AircraftOrders[index].Status != AircraftOrderStatus.Готов)
+            if (element.Status != AircraftOrderStatus.Готов)
             {
                 throw new Exception("Заказ не в статусе \"Готов\"");
             }
-            source.AircraftOrders[index].Status = AircraftOrderStatus.Оплачен;
+            element.Status = AircraftOrderStatus.Оплачен;
+        }
+
+        public void PutElementOnWarehouse(WarehouseElementBindingModel model)
+        {
+            WarehouseElement element = source.WarehouseElements.FirstOrDefault(rec =>
+            rec.WarehouseId == model.WarehouseId && rec.ElementId == model.ElementId);
+            if (element != null)
+            {
+                element.Count += model.Count;
+            }
+            else
+            {
+                int maxId = source.WarehouseElements.Count > 0 ?
+                source.WarehouseElements.Max(rec => rec.Id) : 0;
+                source.WarehouseElements.Add(new WarehouseElement
+                {
+                    Id = ++maxId,
+                    WarehouseId = model.WarehouseId,
+                    ElementId = model.ElementId,
+                    Count = model.Count
+                });
+            }
         }
     }
 }

@@ -151,5 +151,19 @@ namespace AircraftBuildingPlantView
             var form = Container.Resolve<FormAircraft>();
             form.ShowDialog();
         }
+
+        private void складыToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            
+                var form = Container.Resolve<Form_Warehouses>();
+                form.ShowDialog();
+            
+        }
+
+        private void пополнитьСкладToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = Container.Resolve<FormPutOnWarehouse>();
+            form.ShowDialog();
+        }
     }
 }
