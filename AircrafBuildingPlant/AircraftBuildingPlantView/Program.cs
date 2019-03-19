@@ -34,8 +34,6 @@ namespace AircraftBuildingPlantView
             HierarchicalLifetimeManager());
             currentContainer.RegisterType<IAircraftService, AircraftServiceList>(new
             HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IWarehouseService, WarehouseServiceList>(new
-            HierarchicalLifetimeManager());
             currentContainer.RegisterType<IMainService, MainServiceList>(new
             HierarchicalLifetimeManager());
             return currentContainer;

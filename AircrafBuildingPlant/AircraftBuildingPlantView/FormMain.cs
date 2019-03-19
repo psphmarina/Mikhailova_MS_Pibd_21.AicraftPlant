@@ -134,15 +134,21 @@ namespace AircraftBuildingPlantView
             LoadData();
         }
 
-        private void складыToolStripMenuItem_Click(object sender, EventArgs e)
+        private void клиентыToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormWarehouses>();
+            var form = Container.Resolve<FormCustomer>();
             form.ShowDialog();
         }
 
-        private void пополнитьСкладToolStripMenuItem_Click(object sender, EventArgs e)
+        private void компонентыToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormPutOnWarehouse>();
+            var form = Container.Resolve<FormElements>();
+            form.ShowDialog();
+        }
+
+        private void изделияToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            var form = Container.Resolve<FormAircraft>();
             form.ShowDialog();
         }
     }

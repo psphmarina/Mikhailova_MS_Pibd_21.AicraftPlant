@@ -15,8 +15,6 @@ namespace AircraftBuildingPlantServiceImplementList
         public List<AircraftOrder> AircraftOrders { get; set; }
         public List<Aircraft> Aircrafts { get; set; }
         public List<AircraftElement> AircraftElements { get; set; }
-        public List<Warehouse> Warehouses { get; set; }
-        public List<WarehouseElement> WarehouseElements { get; set; }
 
         private DataListSingleton()
         {
@@ -25,8 +23,6 @@ namespace AircraftBuildingPlantServiceImplementList
             AircraftOrders = new List<AircraftOrder>();
             Aircrafts = new List<Aircraft>();
             AircraftElements = new List<AircraftElement>();
-            Warehouses = new List<Warehouse>(); 
-            WarehouseElements = new List<WarehouseElement>();
         }
 
         public static DataListSingleton GetInstance()

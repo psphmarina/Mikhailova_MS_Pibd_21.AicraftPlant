@@ -46,14 +46,11 @@
     <Compile Include="BindingModel\AircraftOrderStatusBindingModel.cs" />
     <Compile Include="BindingModel\CustomerBindingModel.cs" />
     <Compile Include="BindingModel\ElementBindingModel.cs" />
-    <Compile Include="BindingModel\WarehouseBindingModel.cs" />
-    <Compile Include="BindingModel\WarehouseElementBindingModel.cs" />
     <Compile Include="Interfaces\IAircraftElementService.cs" />
     <Compile Include="Interfaces\IAircraftService.cs" />
     <Compile Include="Interfaces\ICustomertService.cs" />
     <Compile Include="Interfaces\IElementService.cs" />
     <Compile Include="Interfaces\IMainService.cs" />
-    <Compile Include="Interfaces\IWarehouseService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\AircraftElementViewModel.cs" />
     <Compile Include="ViewModel\AircraftOrderStatusViewModel.cs" />
@@ -61,8 +58,6 @@
     <Compile Include="ViewModel\AircraftViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="ViewModel\ElementViewModel.cs" />
-    <Compile Include="ViewModel\WarehouseElementViewModel.cs" />
-    <Compile Include="ViewModel\WarehouseViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AircraftBuildingPlantModel\AircraftBuildingPlantModel.csproj">

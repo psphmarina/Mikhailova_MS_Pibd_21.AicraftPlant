@@ -13,71 +13,110 @@ namespace AircraftBuildingPlantServiceImplementList.Implementations
     public class AircraftServiceList : IAircraftService
     {
         private DataListSingleton source;
-
         public AircraftServiceList()
         {
             source = DataListSingleton.GetInstance();
         }
         public List<AircraftViewModel> GetList()
         {
-            List<AircraftViewModel> result = source.Aircrafts
-                .Select(rec => new AircraftViewModel
+            List<AircraftViewModel> result = new List<AircraftViewModel>();
+            for (int i = 0; i < source.Aircrafts.Count; ++i)
+            {
+                // требуется дополнительно получить список компонентов для изделия и их количество
+                List<AircraftElementViewModel> productElements = new
+               List<AircraftElementViewModel>();
+                for (int j = 0; j < source.AircraftElements.Count; ++j)
                 {
-                    Id = rec.Id,
-                    AircraftName = rec.AircraftName,
-                    Price = rec.Price,
-                    AircraftElements = source.AircraftElements
-                        .Where(recPC => recPC.AircraftId == rec.Id)
-                        .Select(recPC => new AircraftElementViewModel
+                    if (source.AircraftElements[j].AircraftId == source.Aircrafts[i].Id)
+                    {
+                        string componentName = string.Empty;
+                        for (int k = 0; k < source.Elements.Count; ++k)
                         {
-                            Id = recPC.Id,
-                            AircraftId = recPC.AircraftId,
-                            ElementId = recPC.ElementId,
-                            ElementName = source.Elements.FirstOrDefault(recC =>
-    recC.Id == recPC.ElementId)?.ElementName,
-                            Count = recPC.Count
-                        })
-                         .ToList()
-                })
-                  .ToList();
+                            if (source.AircraftElements[j].ElementId ==
+                           source.Elements[k].Id)
+                            {
+                                componentName = source.Elements[k].ElementName;
+                                break;
+                            }
+                        }
+                        productElements.Add(new AircraftElementViewModel
+                        {
+                            Id = source.AircraftElements[j].Id,
+                            AircraftId = source.AircraftElements[j].AircraftId,
+                            ElementId = source.AircraftElements[j].ElementId,
+                            ElementName = componentName,
+                            Count = source.AircraftElements[j].Count
+                        });
+                    }
+                }
+                result.Add(new AircraftViewModel
+                {
+                    Id = source.Aircrafts[i].Id,
+                    AircraftName = source.Aircrafts[i].AircraftName,
+                    Price = source.Aircrafts[i].Price,
+                    AircraftElements = productElements
+                });
+            }
             return result;
         }
-
         public AircraftViewModel GetElement(int id)
         {
-            Aircraft element = source.Aircrafts.FirstOrDefault(rec => rec.Id == id);
-            if (element != null)
+            for (int i = 0; i < source.Aircrafts.Count; ++i)
             {
-                return new AircraftViewModel
+                // требуется дополнительно получить список компонентов для изделия и их  количество
+                List<AircraftElementViewModel> productElements = new
+    List<AircraftElementViewModel>();
+                for (int j = 0; j < source.AircraftElements.Count; ++j)
                 {
-                    Id = element.Id,
-                    AircraftName = element.AircraftName,
-                    Price = element.Price,
-                    AircraftElements = source.AircraftElements
-                .Where(recPC => recPC.AircraftId == element.Id)
-                .Select(recPC => new AircraftElementViewModel
+                    if (source.AircraftElements[j].AircraftId == source.Aircrafts[i].Id)
+                    {
+                        string componentName = string.Empty;
+                        for (int k = 0; k < source.Elements.Count; ++k)
+                        {
+                            if (source.AircraftElements[j].ElementId ==
+                           source.Elements[k].Id)
+                            {
+                                componentName = source.Elements[k].ElementName;
+                                break;
+                            }
+                        }
+                        productElements.Add(new AircraftElementViewModel
+                        {
+                            Id = source.AircraftElements[j].Id,
+                            AircraftId = source.AircraftElements[j].AircraftId,
+                            ElementId = source.AircraftElements[j].ElementId,
+                            ElementName = componentName,
+                            Count = source.AircraftElements[j].Count
+                        });
+                    }
+                }
+                if (source.Aircrafts[i].Id == id)
                 {
-                    Id = recPC.Id,
-                    AircraftId = recPC.AircraftId,
-                    ElementId = recPC.ElementId,
-                    ElementName = source.Elements.FirstOrDefault(recC =>
-    recC.Id == recPC.ElementId)?.ElementName,
-                    Count = recPC.Count
-                })
-                .ToList()
-                };
+                    return new AircraftViewModel
+                    {
+                        Id = source.Aircrafts[i].Id,
+                        AircraftName = source.Aircrafts[i].AircraftName,
+                        Price = source.Aircrafts[i].Price,
+                        AircraftElements = productElements
+                    };
+                }
             }
             throw new Exception("Элемент не найден");
         }
         public void AddElement(AircraftBindingModel model)
         {
-            Aircraft element = source.Aircrafts.FirstOrDefault(rec => rec.AircraftName == model.AircraftName);
-            if (element != null)
+            int maxId = 0;
+            for (int i = 0; i < source.Aircrafts.Count; ++i)
             {
-                throw new Exception("Уже есть изделие с таким названием");
+                if (source.Aircrafts[i].Id > maxId)
+                {
+                    maxId = source.Aircrafts[i].Id;
+                }
+                if (source.Aircrafts[i].AircraftName == model.AircraftName)
+                {
+                    throw new Exception("Уже есть изделие с таким названием");
+                }
             }
-            int maxId = source.Aircrafts.Count > 0 ? source.Aircrafts.Max(rec => rec.Id) :
-            0;
             source.Aircrafts.Add(new Aircraft
             {
                 Id = maxId + 1,
@@ -85,101 +124,146 @@ namespace AircraftBuildingPlantServiceImplementList.Implementations
                 Price = model.Price
             });
             // компоненты для изделия
-            int maxPCId = source.AircraftElements.Count > 0 ?
-            source.AircraftElements.Max(rec => rec.Id) : 0;
-            // убираем дубли по компонентам
-            var groupElements = model.AircraftElements
-            .GroupBy(rec => rec.ElementId)
-            .Select(rec => new
+            int maxPCId = 0;
+            for (int i = 0; i < source.AircraftElements.Count; ++i)
             {
-                ElementId = rec.Key,
-                Count = rec.Sum(r => r.Count)
-            });
+                if (source.AircraftElements[i].Id > maxPCId)
+                {
+                    maxPCId = source.AircraftElements[i].Id;
+                }
+            }
+            // убираем дубли по компонентам
+            for (int i = 0; i < model.AircraftElements.Count; ++i)
+            {
+                for (int j = 1; j < model.AircraftElements.Count; ++j)
+                {
+                    if (model.AircraftElements[i].ElementId ==
+                    model.AircraftElements[j].ElementId)
+                    {
+                        model.AircraftElements[i].Count +=
+                        model.AircraftElements[j].Count;
+                        model.AircraftElements.RemoveAt(j--);
+                    }
+                }
+            }
             // добавляем компоненты
-            foreach (var groupElement in groupElements)
+            for (int i = 0; i < model.AircraftElements.Count; ++i)
             {
                 source.AircraftElements.Add(new AircraftElement
                 {
                     Id = ++maxPCId,
                     AircraftId = maxId + 1,
-                    ElementId = groupElement.ElementId,
-                    Count = groupElement.Count
+                    ElementId = model.AircraftElements[i].ElementId,
+                    Count = model.AircraftElements[i].Count
                 });
             }
         }
-
         public void UpdElement(AircraftBindingModel model)
         {
-            Aircraft element = source.Aircrafts.FirstOrDefault(rec => rec.AircraftName ==
-model.AircraftName && rec.Id != model.Id);
-            if (element != null)
+            int index = -1;
+            for (int i = 0; i < source.Aircrafts.Count; ++i)
             {
-                throw new Exception("Уже есть изделие с таким названием");
+                if (source.Aircrafts[i].Id == model.Id)
+                {
+                    index = i;
+                }
+                if (source.Aircrafts[i].AircraftName == model.AircraftName &&
+                source.Aircrafts[i].Id != model.Id)
+                {
+                    throw new Exception("Уже есть изделие с таким названием");
+                }
             }
-            element = source.Aircrafts.FirstOrDefault(rec => rec.Id == model.Id);
-            if (element == null)
+            if (index == -1)
             {
                 throw new Exception("Элемент не найден");
             }
-            element.AircraftName = model.AircraftName;
-            element.Price = model.Price;
-            int maxPCId = source.AircraftElements.Count > 0 ?
-            source.AircraftElements.Max(rec => rec.Id) : 0;
-            // обновляем существуюущие компоненты
-            var compIds = model.AircraftElements.Select(rec =>
-            rec.ElementId).Distinct();
-            var updateElements = source.AircraftElements.Where(rec => rec.AircraftId ==
-            model.Id && compIds.Contains(rec.ElementId));
-            foreach (var updateElement in updateElements)
+            source.Aircrafts[index].AircraftName = model.AircraftName;
+            source.Aircrafts[index].Price = model.Price;
+            int maxPCId = 0;
+            for (int i = 0; i < source.AircraftElements.Count; ++i)
             {
-                updateElement.Count = model.AircraftElements.FirstOrDefault(rec =>
-                rec.Id == updateElement.Id).Count;
-            }
-            source.AircraftElements.RemoveAll(rec => rec.AircraftId == model.Id &&
-            !compIds.Contains(rec.ElementId));
-            // новые записи
-            var groupElements = model.AircraftElements
-            .Where(rec => rec.Id == 0)
-            .GroupBy(rec => rec.ElementId)
-            .Select(rec => new
-            {
-                ElementId = rec.Key,
-                Count = rec.Sum(r => r.Count)
-            });
-            foreach (var groupElement in groupElements)
-            {
-                AircraftElement elementPC = source.AircraftElements.FirstOrDefault(rec
-                => rec.AircraftId == model.Id && rec.ElementId == groupElement.ElementId);
-                if (elementPC != null)
+                if (source.AircraftElements[i].Id > maxPCId)
                 {
-                    elementPC.Count += groupElement.Count;
+                    maxPCId = source.AircraftElements[i].Id;
                 }
-                else
+            }
+            // обновляем существуюущие компоненты
+            for (int i = 0; i < source.AircraftElements.Count; ++i)
+            {
+                if (source.AircraftElements[i].AircraftId == model.Id)
                 {
-                    source.AircraftElements.Add(new AircraftElement
+                    bool flag = true;
+                    for (int j = 0; j < model.AircraftElements.Count; ++j)
                     {
-                        Id = ++maxPCId,
-                        AircraftId = model.Id,
-                        ElementId = groupElement.ElementId,
-                        Count = groupElement.Count
-                    });
+                        // если встретили, то изменяем количество
+                        if (source.AircraftElements[i].Id ==
+                       model.AircraftElements[j].Id)
+                        {
+                            source.AircraftElements[i].Count =
+                           model.AircraftElements[j].Count;
+                            flag = false;
+                            break;
+                        }
+                    }
+                    // если не встретили, то удаляем
+                    if (flag)
+                    {
+                        source.AircraftElements.RemoveAt(i--);
+                    }
+                }
+            }
+            // новые записи
+            for (int i = 0; i < model.AircraftElements.Count; ++i)
+            {
+                if (model.AircraftElements[i].Id == 0)
+                {
+                    // ищем дубли
+                    for (int j = 0; j < source.AircraftElements.Count; ++j)
+                    {
+                        if (source.AircraftElements[j].AircraftId == model.Id &&
+                        source.AircraftElements[j].ElementId ==
+                       model.AircraftElements[i].ElementId)
+                        {
+                            source.AircraftElements[j].Count +=
+                           model.AircraftElements[i].Count;
+                            model.AircraftElements[i].Id =
+                           source.AircraftElements[j].Id;
+                            break;
+                        }
+                    }
+                    // если не нашли дубли, то новая запись
+                    if (model.AircraftElements[i].Id == 0)
+                    {
+                        source.AircraftElements.Add(new AircraftElement
+                        {
+                            Id = ++maxPCId,
+                            AircraftId = model.Id,
+                            ElementId = model.AircraftElements[i].ElementId,
+                            Count = model.AircraftElements[i].Count
+                        });
+                    }
                 }
             }
         }
-
         public void DelElement(int id)
         {
-            Aircraft element = source.Aircrafts.FirstOrDefault(rec => rec.Id == id);
-            if (element != null)
+            // удаяем записи по компонентам при удалении изделия
+            for (int i = 0; i < source.AircraftElements.Count; ++i)
             {
-                // удаяем записи по компонентам при удалении изделия
-                source.AircraftElements.RemoveAll(rec => rec.AircraftId == id);
-                source.Aircrafts.Remove(element);
+                if (source.AircraftElements[i].AircraftId == id)
+                {
+                    source.AircraftElements.RemoveAt(i--);
+                }
             }
-            else
+            for (int i = 0; i < source.Aircrafts.Count; ++i)
             {
-                throw new Exception("Элемент не найден");
+                if (source.Aircrafts[i].Id == id)
+                {
+                    source.Aircrafts.RemoveAt(i);
+                    return;
+                }
             }
-        }
+            throw new Exception("Элемент не найден");
+        }
     }
 }
