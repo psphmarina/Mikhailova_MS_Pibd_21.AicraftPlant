@@ -123,12 +123,6 @@
     <Compile Include="FormWarehouses.Designer.cs">
       <DependentUpon>FormWarehouses.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_Warehouses.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form_Warehouses.Designer.cs">
-      <DependentUpon>Form_Warehouses.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormAircraft.resx">
@@ -163,9 +157,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormWarehouses.resx">
       <DependentUpon>FormWarehouses.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form_Warehouses.resx">
-      <DependentUpon>Form_Warehouses.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

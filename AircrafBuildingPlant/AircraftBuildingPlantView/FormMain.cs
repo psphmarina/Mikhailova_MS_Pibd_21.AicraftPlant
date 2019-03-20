@@ -155,7 +155,7 @@ namespace AircraftBuildingPlantView
         private void складыToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             
-                var form = Container.Resolve<Form_Warehouses>();
+                var form = Container.Resolve<FormWarehouses>();
                 form.ShowDialog();
             
         }
