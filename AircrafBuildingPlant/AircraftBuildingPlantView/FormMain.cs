@@ -168,7 +168,7 @@ namespace AircraftBuildingPlantView
 
         private void прайсИзделийToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveFileDialog sfd = new SaveFileDialog
+            /*SaveFileDialog sfd = new SaveFileDialog
             {
                 Filter = "doc|*.doc|docx|*.docx"
             };
@@ -177,7 +177,7 @@ namespace AircraftBuildingPlantView
                 try
                 {
                     
-                    reportService.SaveAircraftPrice(new ReplayBindingModel
+                    service.SaveAircraftPrice(new ReplayBindingModel
                     {
                         FileName = sfd.FileName
                     });
@@ -189,19 +189,19 @@ namespace AircraftBuildingPlantView
                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
                    MessageBoxIcon.Error);
                 }
-            }
+            }*/
         }
 
         private void загруженностьСкладовToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormWarehouseLoading>();
-            form.ShowDialog();
+            //var form = Container.Resolve<FormWarehouseLoading>();
+            //form.ShowDialog();
         }
 
         private void заказыКлиентовToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormCustomerOrders>();
-            form.ShowDialog();
+            //var form = Container.Resolve<FormCustomerOrders>();
+            //form.ShowDialog();
         }
     }
 }
