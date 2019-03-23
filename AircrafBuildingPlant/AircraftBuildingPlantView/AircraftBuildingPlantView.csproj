@@ -68,6 +68,7 @@
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -96,6 +97,12 @@
     </Compile>
     <Compile Include="FormAircraftElement.designer.cs">
       <DependentUpon>FormAircraftElement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormCustomerOrders.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormCustomerOrders.Designer.cs">
+      <DependentUpon>FormCustomerOrders.cs</DependentUpon>
     </Compile>
     <Compile Include="FormCustomers.cs">
       <SubType>Form</SubType>
@@ -166,6 +173,9 @@
     <EmbeddedResource Include="FormAircraftElement.resx">
       <DependentUpon>FormAircraftElement.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormCustomerOrders.resx">
+      <DependentUpon>FormCustomerOrders.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormCustomers.resx">
       <DependentUpon>FormCustomers.cs</DependentUpon>
     </EmbeddedResource>
@@ -205,8 +215,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Report.rdlc" />
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\AircraftBuildingPlantServiceDAL.ViewModel.AircraftElementViewModel.datasource" />
+    <None Include="Properties\DataSources\AircraftBuildingPlantServiceDAL.ViewModel.AircraftOrderViewModel.datasource" />
+    <None Include="Properties\DataSources\AircraftBuildingPlantServiceDAL.ViewModel.AircraftViewModel.datasource" />
+    <None Include="Properties\DataSources\AircraftBuildingPlantServiceDAL.ViewModel.CustomerViewModel.datasource" />
     <None Include="Properties\DataSources\AircraftBuildingPlantServiceDAL.ViewModel.ElementViewModel.datasource" />
+    <None Include="Properties\DataSources\AircraftBuildingPlantServiceDAL.ViewModel.WarehouseElementViewModel.datasource" />
+    <None Include="Properties\DataSources\AircraftBuildingPlantServiceDAL.ViewModel.WarehouseViewModel.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

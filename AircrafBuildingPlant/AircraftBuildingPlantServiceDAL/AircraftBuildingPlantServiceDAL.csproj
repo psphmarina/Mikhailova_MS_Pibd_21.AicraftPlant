@@ -74,5 +74,8 @@
       <Name>AircraftBuildingPlantModel</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\DataSources\AircraftBuildingPlantServiceDAL.ViewModel.CustomerAircraftOrdersModel.datasource" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

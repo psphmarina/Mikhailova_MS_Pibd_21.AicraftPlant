@@ -168,17 +168,40 @@ namespace AircraftBuildingPlantView
 
         private void прайсИзделийToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "doc|*.doc|docx|*.docx"
+            };
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    
+                    reportService.SaveAircraftPrice(new ReplayBindingModel
+                    {
+                        FileName = sfd.FileName
+                    });
+                    MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
+                   MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void загруженностьСкладовToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            var form = Container.Resolve<FormWarehouseLoading>();
+            form.ShowDialog();
         }
 
         private void заказыКлиентовToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            var form = Container.Resolve<FormCustomerOrders>();
+            form.ShowDialog();
         }
     }
 }
