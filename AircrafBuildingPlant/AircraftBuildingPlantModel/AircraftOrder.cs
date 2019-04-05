@@ -19,5 +19,7 @@ namespace AircraftBuildingPlantModel
         public AircraftOrderStatus Status { get; set; }
         public DateTime DateCreate { get; set; }
         public DateTime? DateImplement { get; set; }
+        public virtual Customer Customer { get; set; }
+        public virtual Aircraft Aircraft { get; set; }
     }
 }
