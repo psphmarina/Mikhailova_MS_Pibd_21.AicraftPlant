@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{543558C0-B84E-440E-B304-22E35E2D0503}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AircraftPlantServiceImplementDataBase</RootNamespace>
+    <AssemblyName>AircraftPlantServiceImplementDataBase</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AircraftDbContext.cs" />
+    <Compile Include="Implementations\AircraftServiceDB.cs" />
+    <Compile Include="Implementations\CustomerServiceDB.cs" />
+    <Compile Include="Implementations\ElementServiceDB.cs" />
+    <Compile Include="Implementations\MainServiceDB.cs" />
+    <Compile Include="Implementations\WarehouseServiceDB.cs" />
+    <Compile Include="Migrations\201904050733416_FirstMigration.cs" />
+    <Compile Include="Migrations\201904050733416_FirstMigration.Designer.cs">
+      <DependentUpon>201904050733416_FirstMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AircraftBuildingPlantModel\AircraftBuildingPlantModel.csproj">
+      <Project>{c944496e-ffec-4737-be24-b11c0daab708}</Project>
+      <Name>AircraftBuildingPlantModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AircraftBuildingPlantServiceDAL\AircraftBuildingPlantServiceDAL.csproj">
+      <Project>{8CA3FD98-6CF8-4CF0-B849-0393B2ACFF48}</Project>
+      <Name>AircraftBuildingPlantServiceDAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AircraftBuildingPlantServiceImplementList\AircraftBuildingPlantServiceImplementList.csproj">
+      <Project>{1a814fd8-dc6f-41c6-a8c3-8b8dc0e9226c}</Project>
+      <Name>AircraftBuildingPlantServiceImplementList</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201904050733416_FirstMigration.resx">
+      <DependentUpon>201904050733416_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

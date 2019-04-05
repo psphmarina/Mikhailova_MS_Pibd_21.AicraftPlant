@@ -202,6 +202,10 @@
       <Project>{1a814fd8-dc6f-41c6-a8c3-8b8dc0e9226c}</Project>
       <Name>AircraftBuildingPlantServiceImplementList</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AircraftPlantServiceImplementDataBase\AircraftPlantServiceImplementDataBase.csproj">
+      <Project>{543558c0-b84e-440e-b304-22e35e2d0503}</Project>
+      <Name>AircraftPlantServiceImplementDataBase</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
