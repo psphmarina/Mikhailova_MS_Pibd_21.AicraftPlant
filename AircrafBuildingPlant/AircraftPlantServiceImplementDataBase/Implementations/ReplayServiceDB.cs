@@ -14,7 +14,7 @@ using AircraftBuildingPlantServiceDAL.ViewModel;
 
 namespace AircraftPlantServiceImplementDataBase.Implementations
 {
-    class ReplayServiceDB : IReplayService
+    public class ReplayServiceDB : IReplayService
     {
         private AircraftDbContext context;
         public ReplayServiceDB(AircraftDbContext context)
