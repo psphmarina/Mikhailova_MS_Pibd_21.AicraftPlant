@@ -74,7 +74,18 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>[@ReportParameterPeriod]</Value>
+                    <Value />
+                    <Style />
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Parameters!ReportParameterPeriod.Value</Value>
                     <Style />
                   </TextRun>
                 </TextRuns>

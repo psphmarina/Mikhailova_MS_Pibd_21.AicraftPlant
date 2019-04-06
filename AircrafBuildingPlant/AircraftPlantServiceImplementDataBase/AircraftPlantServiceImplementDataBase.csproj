@@ -69,6 +69,10 @@
     <Compile Include="Migrations\201903201514514_FirstMigration.Designer.cs">
       <DependentUpon>201903201514514_FirstMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904060424231_FirstMigration1.cs" />
+    <Compile Include="Migrations\201904060424231_FirstMigration1.Designer.cs">
+      <DependentUpon>201904060424231_FirstMigration1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -95,6 +99,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201903201514514_FirstMigration.resx">
       <DependentUpon>201903201514514_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904060424231_FirstMigration1.resx">
+      <DependentUpon>201904060424231_FirstMigration1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
