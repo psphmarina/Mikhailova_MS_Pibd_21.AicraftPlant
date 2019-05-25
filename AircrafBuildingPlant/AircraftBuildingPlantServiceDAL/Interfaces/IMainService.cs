@@ -11,6 +11,7 @@ namespace AircraftBuildingPlantServiceDAL.Interfaces
     public interface IMainService
     {
         List<AircraftOrderViewModel> GetList();
+        List<AircraftOrderViewModel> GetFreeOrders();
         void CreateOrder(AircraftOrderBindingModel model);
         void TakeOrderInWork(AircraftOrderBindingModel model);
         void FinishOrder(AircraftOrderBindingModel model);

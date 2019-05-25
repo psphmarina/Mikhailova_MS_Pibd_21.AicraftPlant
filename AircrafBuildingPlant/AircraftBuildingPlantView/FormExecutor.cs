@@ -1,5 +1,4 @@
 ﻿using AircraftBuildingPlantServiceDAL.BindingModel;
-using AircraftBuildingPlantServiceDAL.Interfaces;
 using AircraftBuildingPlantServiceDAL.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -13,25 +12,23 @@ using System.Windows.Forms;
 
 namespace AircraftBuildingPlantView
 {
-    public partial class FormElement : Form
+    public partial class FormExecutor : Form
     {
-        
         public int Id { set { id = value; } }
         private int? id;
-
-        public FormElement()
+        public FormExecutor()
         {
             InitializeComponent();
         }
-        private void FormElement_Load(object sender, EventArgs e)
+        private void FormExecutor_Load(object sender, EventArgs e)
         {
             if (id.HasValue)
             {
                 try
                 {
-                    ElementViewModel el =
-                    APIClient.GetRequest<ElementViewModel>("api/Element/Get/" + id.Value);
-                    textBoxName.Text = el.ElementName;
+                    ExecutorViewModel el =
+                    APIClient.GetRequest<ExecutorViewModel>("api/Executor/Get/" + id.Value);
+                    textBoxName.Text = el.ExecutorFIO;
                 }
                 catch (Exception ex)
                 {
@@ -52,20 +49,18 @@ namespace AircraftBuildingPlantView
             {
                 if (id.HasValue)
                 {
-                    APIClient.PostRequest<ElementBindingModel,
-                    bool>("api/Element/UpdElement", new ElementBindingModel
+                    APIClient.PostRequest<ExecutorBindingModel, bool>("api/Executor/UpdElement", new ExecutorBindingModel
                     {
                         Id = id.Value,
-                        ElementName = textBoxName.Text
+                        ExecutorFIO = textBoxName.Text
                     });
                 }
                 else
                 {
-                    APIClient.PostRequest<ElementBindingModel,
-                   bool>("api/Element/AddElement", new ElementBindingModel
+                    APIClient.PostRequest<ExecutorBindingModel, bool>("api/Executor/AddElement", new ExecutorBindingModel
                    {
-                        ElementName = textBoxName.Text
-                    });
+                       ExecutorFIO = textBoxName.Text
+                   });
                 }
                 MessageBox.Show("Сохранение прошло успешно", "Сообщение",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);

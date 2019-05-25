@@ -122,7 +122,7 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
                 try
                 {
                     Aircraft element = context.Aircrafts.FirstOrDefault(rec =>
-                   rec.AircraftName == model.AircraftName && rec.Id != model.Id);
+                    rec.AircraftName == model.AircraftName && rec.Id != model.Id);
                     if (element != null)
                     {
                         throw new Exception("Уже есть изделие с таким названием");
@@ -137,13 +137,13 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
                     context.SaveChanges();
                     // обновляем существуюущие компоненты
                     var compIds = model.AircraftElements.Select(rec =>
-                   rec.ElementId).Distinct();
+                    rec.ElementId).Distinct();
                     var updateElements = context.AircraftElements.Where(rec =>
-                   rec.AircraftId == model.Id && compIds.Contains(rec.ElementId));
+                    rec.AircraftId == model.Id && compIds.Contains(rec.ElementId));
                     foreach (var updateElement in updateElements)
                     {
                         updateElement.Count =
-                       model.AircraftElements.FirstOrDefault(rec => rec.Id == updateElement.Id).Count;
+                        model.AircraftElements.FirstOrDefault(rec => rec.Id == updateElement.Id).Count;
                     }
                     context.SaveChanges();
                     context.AircraftElements.RemoveRange(context.AircraftElements.Where(rec =>
@@ -152,17 +152,17 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
                     // новые записи
                     var groupElements = model.AircraftElements
                     .Where(rec => rec.Id == 0)
-                   .GroupBy(rec => rec.ElementId)
-                   .Select(rec => new
-                   {
-                       ElementId = rec.Key,
-                       Count = rec.Sum(r => r.Count)
-                   });
+                    .GroupBy(rec => rec.ElementId)
+                    .Select(rec => new
+                    {
+                        ElementId = rec.Key,
+                        Count = rec.Sum(r => r.Count)
+                    });
                     foreach (var groupElement in groupElements)
                     {
                         AircraftElement elementPC =
-                       context.AircraftElements.FirstOrDefault(rec => rec.AircraftId == model.Id &&
-                       rec.ElementId == groupElement.ElementId);
+                        context.AircraftElements.FirstOrDefault(rec => rec.AircraftId == model.Id &&
+                        rec.ElementId == groupElement.ElementId);
                         if (elementPC != null)
                         {
                             elementPC.Count += groupElement.Count;

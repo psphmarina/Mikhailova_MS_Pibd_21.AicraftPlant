@@ -1,22 +1,21 @@
 ﻿using AircraftBuildingPlantServiceDAL.BindingModel;
 using AircraftBuildingPlantServiceDAL.Interfaces;
+using AircraftBuildingPlantServiceDAL.ViewModel;
 using Microsoft.Reporting.WinForms;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
-using Unity;
 
 
 namespace AircraftBuildingPlantView
 {
     public partial class FormCustomerOrders : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
-        private readonly IReplayService service;
-        public FormCustomerOrders(IReplayService service)
+        
+
+        public FormCustomerOrders()
         {
             InitializeComponent();
-            this.service = service;
         }
 
         private void FormCustomerOrders_Load(object sender, EventArgs e)
@@ -30,32 +29,35 @@ namespace AircraftBuildingPlantView
             if (dateTimePickerFrom.Value.Date >= dateTimePickerTo.Value.Date)
             {
                 MessageBox.Show("Дата начала должна быть меньше даты окончания",
-               "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             try
             {
                 ReportParameter parameter = new ReportParameter("ReportParameterPeriod",
                 "c " +
-               dateTimePickerFrom.Value.ToShortDateString() +
+                dateTimePickerFrom.Value.ToShortDateString() +
                 " по " +
-               dateTimePickerTo.Value.ToShortDateString());
+                dateTimePickerTo.Value.ToShortDateString());
                 reportViewer.LocalReport.SetParameters(parameter);
-                var dataSource = service.GetCustomerAircraftOrders(new ReplayBindingModel
+                List<CustomerAircraftOrdersModel> response =
+                APIClient.PostRequest<ReplayBindingModel,
+                List<CustomerAircraftOrdersModel>>("api/Report/GetCustomerOrders", new ReplayBindingModel
                 {
                     DateFrom = dateTimePickerFrom.Value,
                     DateTo = dateTimePickerTo.Value
                 });
                 ReportDataSource source = new ReportDataSource("DataSetOrders",
-               dataSource);
+                response);
                 reportViewer.LocalReport.DataSources.Add(source);
                 reportViewer.RefreshReport();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
-               MessageBoxIcon.Error);
-            }
+                MessageBoxIcon.Error);
+            }
+
         }
 
         private void buttonPdf_Click(object sender, EventArgs e)
@@ -63,8 +65,8 @@ namespace AircraftBuildingPlantView
             if (dateTimePickerFrom.Value.Date >= dateTimePickerTo.Value.Date)
             {
                 MessageBox.Show("Дата начала должна быть меньше даты окончания",
-               "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
- return;
+                "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
             SaveFileDialog sfd = new SaveFileDialog
             {
@@ -74,7 +76,8 @@ namespace AircraftBuildingPlantView
             {
                 try
                 {
-                    service.SaveCustomerOrders(new ReplayBindingModel
+                    APIClient.PostRequest<ReplayBindingModel,
+                    bool>("api/Report/SaveClientOrders", new ReplayBindingModel
                     {
                         FileName = sfd.FileName,
                         DateFrom = dateTimePickerFrom.Value,
@@ -86,7 +89,7 @@ namespace AircraftBuildingPlantView
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
-                   MessageBoxIcon.Error);
+                    MessageBoxIcon.Error);
                 }
             }
         }

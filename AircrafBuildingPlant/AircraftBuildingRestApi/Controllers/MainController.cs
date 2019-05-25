@@ -1,5 +1,7 @@
 ﻿using AircraftBuildingPlantServiceDAL.BindingModel;
 using AircraftBuildingPlantServiceDAL.Interfaces;
+using AircraftBuildingPlantServiceDAL.ViewModel;
+using AircraftBuildingRestApi.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +14,12 @@ namespace AircraftBuildingRestApi.Controllers
     public class MainController : ApiController
     {
         private readonly IMainService _service;
-        public MainController(IMainService service)
+        private readonly IExecutorService _serviceExecutor;
+        public MainController(IMainService service, IExecutorService
+       serviceExecutor)
         {
             _service = service;
+            _serviceExecutor = serviceExecutor;
         }
         [HttpGet]
         public IHttpActionResult GetList()
@@ -32,16 +37,6 @@ namespace AircraftBuildingRestApi.Controllers
             _service.CreateOrder(model);
         }
         [HttpPost]
-        public void TakeOrderInWork(AircraftOrderBindingModel model)
-        {
-            _service.TakeOrderInWork(model);
-        }
-        [HttpPost]
- public void FinishOrder(AircraftOrderBindingModel model)
-        {
-            _service.FinishOrder(model);
-        }
-        [HttpPost]
         public void PayOrder(AircraftOrderBindingModel model)
         {
             _service.PayOrder(model);
@@ -51,5 +46,19 @@ namespace AircraftBuildingRestApi.Controllers
         {
             _service.PutElementOnWarehouse(model);
         }
+        [HttpPost]
+        public void StartWork()
+        {
+            List<AircraftOrderViewModel> orders = _service.GetFreeOrders();
+            foreach (var order in orders)
+            {
+                ExecutorViewModel impl = _serviceExecutor.GetFreeWorker();
+                if (impl == null)
+                {
+                    throw new Exception("Нет сотрудников");
+                }
+                new WorkExecutor(_service, _serviceExecutor, impl.Id, order.Id);
+            }
+        }
     }
 }

@@ -164,5 +164,17 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
             }
             context.SaveChanges();
         }
+        public List<AircraftOrderViewModel> GetFreeOrders()
+        {
+            List<AircraftOrderViewModel> result = context.AircraftOrders
+            .Where(x => x.Status == AircraftOrderStatus.Принят || x.Status ==
+           AircraftOrderStatus.НедостаточноРесурсов)
+            .Select(rec => new AircraftOrderViewModel
+            {
+                Id = rec.Id
+            })
+            .ToList();
+            return result;
+        }
     }
 }

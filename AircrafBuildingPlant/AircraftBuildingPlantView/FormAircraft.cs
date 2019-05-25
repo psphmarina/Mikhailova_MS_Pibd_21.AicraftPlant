@@ -2,6 +2,7 @@
 using AircraftBuildingPlantServiceDAL.BindingModel;
 using AircraftBuildingPlantServiceDAL.Interfaces;
 using AircraftBuildingPlantServiceDAL.ViewModel;
+using AircraftBuildingPlantView;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,23 +12,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Unity;
 
 namespace AircraftPlantView
 {
     public partial class FormAircraft : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
+        
         public int Id { set { id = value; } }
-        private readonly IAircraftService service;
         private int? id;
         private List<AircraftElementViewModel> aircraftElements;
 
-        public FormAircraft(IAircraftService service)
+        public FormAircraft()
         {
             InitializeComponent();
-            this.service = service;
         }
 
         private void FormAircraft_Load(object sender, EventArgs e)
@@ -36,7 +33,7 @@ namespace AircraftPlantView
             {
                 try
                 {
-                    AircraftViewModel view = service.GetElement(id.Value);
+                    AircraftViewModel view = APIClient.GetRequest<AircraftViewModel>("api/Aircraft/Get/" + id.Value);
                     if (view != null)
                     {
                         textBoxName.Text = view.AircraftName;
@@ -81,7 +78,7 @@ namespace AircraftPlantView
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormAircraftElement>();
+            var form = new FormAircraftElement();
             if (form.ShowDialog() == DialogResult.OK)
             {
                 if (form.Model != null)
@@ -100,7 +97,7 @@ namespace AircraftPlantView
         {
             if (dataGridViewElements.SelectedRows.Count == 1)
             {
-                var form = Container.Resolve<FormAircraftElement>();
+                var form = new FormAircraftElement();
                 form.Model = aircraftElements[dataGridViewElements.SelectedRows[0].Cells[0].RowIndex];
                 if (form.ShowDialog() == DialogResult.OK)
                 {
@@ -173,8 +170,9 @@ namespace AircraftPlantView
                 }
                 if (id.HasValue)
                 {
-                    service.UpdElement(new AircraftBindingModel
-                    {
+                    APIClient.PostRequest<AircraftBindingModel,
+                     bool>("api/Aircraft/UpdElement", new AircraftBindingModel
+                     {
                         Id = id.Value,
                         AircraftName = textBoxName.Text,
                         Price = Convert.ToInt32(textBoxPrice.Text),
@@ -183,9 +181,10 @@ namespace AircraftPlantView
                 }
                 else
             {
-                    
-            service.AddElement(new AircraftBindingModel
-            {
+
+                    APIClient.PostRequest<AircraftBindingModel,
+                            bool>("api/Aircraft/AddElement", new AircraftBindingModel
+                            {
                 AircraftName = textBoxName.Text,
                 Price = Convert.ToInt32(textBoxPrice.Text),
                 AircraftElements = aircraftElementBM

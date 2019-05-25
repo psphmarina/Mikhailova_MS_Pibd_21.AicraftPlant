@@ -14,6 +14,7 @@ namespace AircraftBuildingPlantModel
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public int AircraftId { get; set; }
+        public int? ExecutorId { get; set; }
         public int Count { get; set; }
         public decimal Sum { get; set; }
         public AircraftOrderStatus Status { get; set; }
@@ -21,5 +22,6 @@ namespace AircraftBuildingPlantModel
         public DateTime? DateImplement { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual Aircraft Aircraft { get; set; }
+        public virtual Executor Executor { get; set; }
     }
 }

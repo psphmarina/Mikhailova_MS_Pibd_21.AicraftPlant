@@ -17,6 +17,8 @@ namespace AircraftBuildingPlantServiceDAL.BindingModel
         [DataMember]
         public int AircraftId { get; set; }
         [DataMember]
+        public int? ExecutorId { get; set; }
+        [DataMember]
         public int Count { get; set; }
         [DataMember]
         public decimal Sum { get; set; }

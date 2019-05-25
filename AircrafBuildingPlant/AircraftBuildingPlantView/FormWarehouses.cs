@@ -1,4 +1,5 @@
-﻿using AircraftBuildingPlantServiceDAL.Interfaces;
+﻿using AircraftBuildingPlantServiceDAL.BindingModel;
+using AircraftBuildingPlantServiceDAL.Interfaces;
 using AircraftBuildingPlantServiceDAL.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -9,27 +10,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Unity;
 
 namespace AircraftBuildingPlantView
 {
     public partial class FormWarehouses : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
-        private readonly IWarehouseService service;
-
-        public FormWarehouses(IWarehouseService service)
+        public FormWarehouses()
         {
             InitializeComponent();
-            this.service = service;
         }
 
         private void LoadData()
         {
             try
             {
-                List<WarehouseViewModel> list = service.GetList();
+                List<WarehouseViewModel> list = APIClient.GetRequest<List<WarehouseViewModel>>("api/Warehouse/GetList");
                 if (list != null)
                 {
                     dataGridView1.DataSource = list;
@@ -47,7 +42,7 @@ namespace AircraftBuildingPlantView
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormWarehouse>();
+            var form = new FormWarehouse();
             if (form.ShowDialog() == DialogResult.OK)
             {
                 LoadData();
@@ -58,7 +53,7 @@ namespace AircraftBuildingPlantView
         {
             if (dataGridView1.SelectedRows.Count == 1)
             {
-                var form = Container.Resolve<FormWarehouse>();
+                var form = new FormWarehouse();
                 form.Id = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
@@ -78,7 +73,8 @@ namespace AircraftBuildingPlantView
                     Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
                     try
                     {
-                        service.DelElement(id);
+                        APIClient.PostRequest<WarehouseBindingModel,
+                        bool>("api/Warehouse/DelElement", new WarehouseBindingModel { Id = id });
                     }
                     catch (Exception ex)
                     {

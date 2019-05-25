@@ -53,6 +53,7 @@
     <Compile Include="AircraftOrderStatus.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="Element.cs" />
+    <Compile Include="Executor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Warehouse.cs" />
     <Compile Include="WarehouseElement.cs" />

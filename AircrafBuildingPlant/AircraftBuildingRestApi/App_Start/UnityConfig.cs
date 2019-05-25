@@ -50,6 +50,8 @@ namespace AircraftBuildingRestApi
 HierarchicalLifetimeManager());
             container.RegisterType<ICustomertService, CustomerServiceDB>(new
            HierarchicalLifetimeManager());
+            container.RegisterType<IExecutorService, ExecutorServiceDB>(new
+           HierarchicalLifetimeManager());
             container.RegisterType<IElementService, ElementServiceDB>(new
            HierarchicalLifetimeManager());
             container.RegisterType<IAircraftService, AircraftServiceDB>(new

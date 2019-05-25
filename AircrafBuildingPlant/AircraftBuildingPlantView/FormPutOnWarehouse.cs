@@ -10,25 +10,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Unity;
 
 namespace AircraftBuildingPlantView
 {
     public partial class FormPutOnWarehouse : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
-        private readonly IWarehouseService serviceW;
-        private readonly IElementService serviceC;
-        private readonly IMainService serviceM;
+        
 
-        public FormPutOnWarehouse(IWarehouseService serviceW, IElementService serviceC,
-IMainService serviceM)
+        public FormPutOnWarehouse()
         {
             InitializeComponent();
-            this.serviceW = serviceW;
-            this.serviceC = serviceC;
-            this.serviceM = serviceM;
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
@@ -53,7 +44,7 @@ IMainService serviceM)
             }
             try
             {
-                serviceM.PutElementOnWarehouse(new WarehouseElementBindingModel
+                APIClient.PostRequest<WarehouseElementBindingModel, bool>("api/Main/PutElementOnWarehouse", new WarehouseElementBindingModel
                 {
                     ElementId = Convert.ToInt32(comboBoxElement.SelectedValue),
                     WarehouseId = Convert.ToInt32(comboBoxWarehouse.SelectedValue),
@@ -80,7 +71,7 @@ IMainService serviceM)
         {
             try
             {
-                List<ElementViewModel> listC = serviceC.GetList();
+                List<ElementViewModel> listC = APIClient.GetRequest<List<ElementViewModel>>("api/Element/GetList");
                 if (listC != null)
                 {
                     comboBoxElement.DisplayMember = "ElementName";
@@ -88,7 +79,7 @@ IMainService serviceM)
                     comboBoxElement.DataSource = listC;
                     comboBoxElement.SelectedItem = null;
                 }
-                List<WarehouseViewModel> listS = serviceW.GetList();
+                List<WarehouseViewModel> listS = APIClient.GetRequest<List<WarehouseViewModel>>("api/Warehouse/GetList");
                 if (listS != null)
                 {
                     comboBoxWarehouse.DisplayMember = "WarehouseName";

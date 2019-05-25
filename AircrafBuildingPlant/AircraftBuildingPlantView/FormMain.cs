@@ -11,29 +11,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Unity;
 
 namespace AircraftBuildingPlantView
 {
     public partial class FormMain : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
-        private readonly IMainService serviceM;
-        private readonly IReplayService replayService;
 
-        public FormMain(IMainService serviceM, IReplayService replayService)
+        public FormMain()
         {
             InitializeComponent();
-            this.serviceM = serviceM;
-            this.replayService = replayService;
         }
 
         private void LoadData()
         {
             try
             {
-                List<AircraftOrderViewModel> list = serviceM.GetList();
+                List<AircraftOrderViewModel> list =
+                APIClient.GetRequest<List<AircraftOrderViewModel>>("api/Main/GetList");
                 if (list != null)
                 {
                     dataGridView.DataSource = list;
@@ -54,25 +48,25 @@ namespace AircraftBuildingPlantView
 
         private void клиентыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormCustomer>();
+            var form = new FormCustomer();
             form.ShowDialog();
         }
 
         private void компонентыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormElements>();
+            var form = new FormElements();
             form.ShowDialog();
         }
 
         private void изделияToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormAircraft>();
+            var form = new FormAircraft();
             form.ShowDialog();
         }
 
         private void buttonCreateOrder_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormOrder>();
+            var form = new FormOrder();
             form.ShowDialog();
             LoadData();
         }
@@ -84,7 +78,11 @@ namespace AircraftBuildingPlantView
                 int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 try
                 {
-                    serviceM.TakeOrderInWork(new AircraftOrderBindingModel { Id = id });
+                    APIClient.PostRequest<AircraftOrderBindingModel,
+                    bool>("api/Main/TakeOrderInWork", new AircraftOrderBindingModel
+                    {
+                        Id = id
+                    });
                     LoadData();
                 }
                 catch (Exception ex)
@@ -102,7 +100,11 @@ namespace AircraftBuildingPlantView
                 int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 try
                 {
-                    serviceM.FinishOrder(new AircraftOrderBindingModel { Id = id });
+                    APIClient.PostRequest<AircraftOrderBindingModel,
+                    bool>("api/Main/FinishOrder", new AircraftOrderBindingModel
+                    {
+                        Id = id
+                    });
                     LoadData();
                 }
                 catch (Exception ex)
@@ -110,8 +112,8 @@ namespace AircraftBuildingPlantView
                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
                 }
+                }
             }
-        }
 
         private void buttonPayOrder_Click(object sender, EventArgs e)
         {
@@ -120,7 +122,11 @@ namespace AircraftBuildingPlantView
                 int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 try
                 {
-                    serviceM.PayOrder(new AircraftOrderBindingModel { Id = id });
+                    APIClient.PostRequest<AircraftOrderBindingModel, bool>("api/Main/.PayOrder",
+                    new AircraftOrderBindingModel
+                    {
+                        Id = id
+                    });
                     LoadData();
                 }
                 catch (Exception ex)
@@ -138,33 +144,33 @@ namespace AircraftBuildingPlantView
 
         private void клиентыToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormCustomer>();
+            var form = new FormCustomer();
             form.ShowDialog();
         }
 
         private void компонентыToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormElements>();
+            var form = new FormElements();
             form.ShowDialog();
         }
 
         private void изделияToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormAircraft>();
+            var form = new FormAircraft();
             form.ShowDialog();
         }
 
         private void складыToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             
-                var form = Container.Resolve<FormWarehouses>();
+                var form = new FormWarehouses();
                 form.ShowDialog();
             
         }
 
         private void пополнитьСкладToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormPutOnWarehouse>();
+            var form = new FormPutOnWarehouse();
             form.ShowDialog();
         }
 
@@ -178,8 +184,8 @@ namespace AircraftBuildingPlantView
             {
                 try
                 {
-                    
-                    replayService.SaveAircraftPrice(new ReplayBindingModel
+                    APIClient.PostRequest<ReplayBindingModel,
+                    bool>("api/Report/SaveProductPrice", new ReplayBindingModel
                     {
                         FileName = sfd.FileName
                     });
@@ -189,22 +195,42 @@ namespace AircraftBuildingPlantView
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
-                   MessageBoxIcon.Error);
+                    MessageBoxIcon.Error);
                 }
-            } 
-
+            }
         }
 
         private void загруженностьСкладовToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormWarehouseLoading>();
+            var form = new FormWarehouseLoading();
             form.ShowDialog();
         }
 
         private void заказыКлиентовToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormCustomerOrders>();
+            var form = new FormCustomerOrders();
             form.ShowDialog();
+        }
+
+        private void сотрудникиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new FormExecutors();
+            form.ShowDialog();
+        }
+
+        private void запускРаботToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                APIClient.PostRequest<int?, bool>("api/Main/StartWork", null);
+                MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK,
+               MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
+               MessageBoxIcon.Error);
+            }
         }
     }
 }
