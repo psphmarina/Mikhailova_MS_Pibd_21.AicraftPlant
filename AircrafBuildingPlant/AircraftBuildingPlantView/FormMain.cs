@@ -122,7 +122,7 @@ namespace AircraftBuildingPlantView
                 int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 try
                 {
-                    APIClient.PostRequest<AircraftOrderBindingModel, bool>("api/Main/.PayOrder",
+                    APIClient.PostRequest<AircraftOrderBindingModel, bool>("api/Main/PayOrder",
                     new AircraftOrderBindingModel
                     {
                         Id = id
