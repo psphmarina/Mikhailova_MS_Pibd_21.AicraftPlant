@@ -7,8 +7,9 @@ using System.Linq;
 using System.Data.Entity;
 using System.Collections.Generic;
 using System.Data.Entity.SqlServer;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
+using System.Net.Mail;
+using System.Configuration;
 
 namespace AircraftPlantServiceImplementDataBase.Implementations
 {
@@ -40,7 +41,20 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
                 Count = rec.Count,
                 Sum = rec.Sum,
                 CustomerFIO = rec.Customer.CustomerFIO,
-                AircraftName = rec.Aircraft.AircraftName
+                AircraftName = rec.Aircraft.AircraftName,
+                ExecutorName = rec.Executor.ExecutorFIO
+            })
+            .ToList();
+            return result;
+        }
+        public List<AircraftOrderViewModel> GetFreeOrders()
+        {
+            List<AircraftOrderViewModel> result = context.AircraftOrders
+            .Where(x => x.Status == AircraftOrderStatus.Принят || x.Status ==
+           AircraftOrderStatus.НедостаточноРесурсов)
+            .Select(rec => new AircraftOrderViewModel
+            {
+                Id = rec.Id
             })
             .ToList();
             return result;
@@ -60,22 +74,22 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
         }
         public void TakeOrderInWork(AircraftOrderBindingModel model)
         {
-        using (var transaction = context.Database.BeginTransaction())
+            using (var transaction = context.Database.BeginTransaction())
             {
+                AircraftOrder element = context.AircraftOrders.FirstOrDefault(rec => rec.Id == model.Id);
                 try
                 {
-                    AircraftOrder element = context.AircraftOrders.FirstOrDefault(rec => rec.Id ==
-                   model.Id);
                     if (element == null)
                     {
                         throw new Exception("Элемент не найден");
                     }
-                    if (element.Status != AircraftOrderStatus.Принят)
+                    if (element.Status != AircraftOrderStatus.Принят && element.Status !=
+                    AircraftOrderStatus.НедостаточноРесурсов)
                     {
                         throw new Exception("Заказ не в статусе \"Принят\"");
                     }
                     var aircraftElements = context.AircraftElements.Include(rec =>
- rec.Element).Where(rec => rec.AircraftId == element.AircraftId);
+                    rec.Element).Where(rec => rec.AircraftId == element.AircraftId);
                     // списываем
                     foreach (var aircraftElement in aircraftElements)
                     {
@@ -105,14 +119,21 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
                            aircraftElement.Element.ElementName + " требуется " + aircraftElement.Count + ", не хватает " + countOnWarehouses);
                          }
                     }
+                    element.ExecutorId = model.ExecutorId;
                     element.DateImplement = DateTime.Now;
                     element.Status = AircraftOrderStatus.Выполняется;
                     context.SaveChanges();
+                    SendEmail(element.Customer.Mail, "Оповещение по заказам",
+                    string.Format("Заказ №{0} от {1} передеан в работу", element.Id,
+                    element.DateCreate.ToShortDateString()));
                     transaction.Commit();
                 }
                 catch (Exception)
                 {
                     transaction.Rollback();
+                    element.Status = AircraftOrderStatus.НедостаточноРесурсов;
+                    context.SaveChanges();
+                    transaction.Commit();
                     throw;
                 }
             }
@@ -121,7 +142,7 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
         {
             AircraftOrder element = context.AircraftOrders.FirstOrDefault(rec => rec.Id == model.Id);
             if (element == null)
-        {
+            {
                 throw new Exception("Элемент не найден");
             }
             if (element.Status != AircraftOrderStatus.Выполняется)
@@ -130,7 +151,8 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
             }
             element.Status = AircraftOrderStatus.Готов;
             context.SaveChanges();
-        }
+            SendEmail(element.Customer.Mail, "Оповещение по заказам", string.Format("Заказ №{ 0} от { 1}  передан на оплату", element.Id, element.DateCreate.ToShortDateString()));
+        }
         public void PayOrder(AircraftOrderBindingModel model)
         {
             AircraftOrder element = context.AircraftOrders.FirstOrDefault(rec => rec.Id == model.Id);
@@ -144,6 +166,7 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
             }
             element.Status = AircraftOrderStatus.Оплачен;
             context.SaveChanges();
+            SendEmail(element.Customer.Mail, "Оповещение по заказам", string.Format("Заказ №{ 0} от { 1} оплачен успешно", element.Id, element.DateCreate.ToShortDateString()));
         }
         public void PutElementOnWarehouse(WarehouseElementBindingModel model)
         {
@@ -164,17 +187,37 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
             }
             context.SaveChanges();
         }
-        public List<AircraftOrderViewModel> GetFreeOrders()
+        private void SendEmail(string mailAddress, string subject, string text)
         {
-            List<AircraftOrderViewModel> result = context.AircraftOrders
-            .Where(x => x.Status == AircraftOrderStatus.Принят || x.Status ==
-           AircraftOrderStatus.НедостаточноРесурсов)
-            .Select(rec => new AircraftOrderViewModel
+            MailMessage objMailMessage = new MailMessage();
+            SmtpClient objSmtpClient = null;
+            try
             {
-                Id = rec.Id
-            })
-            .ToList();
-            return result;
-        }
+                objMailMessage.From = new
+               MailAddress(ConfigurationManager.AppSettings["MailLogin"]);
+                objMailMessage.To.Add(new MailAddress(mailAddress));
+                objMailMessage.Subject = subject;
+                objMailMessage.Body = text;
+                objMailMessage.SubjectEncoding = System.Text.Encoding.UTF8;
+                objMailMessage.BodyEncoding = System.Text.Encoding.UTF8;
+                objSmtpClient = new SmtpClient("smtp.gmail.com", 587);
+                objSmtpClient.UseDefaultCredentials = false;
+                objSmtpClient.EnableSsl = true;
+                objSmtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                objSmtpClient.Credentials = new
+               NetworkCredential(ConfigurationManager.AppSettings["MailLogin"],
+               ConfigurationManager.AppSettings["MailPassword"]);
+                objSmtpClient.Send(objMailMessage);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                objMailMessage = null;
+                objSmtpClient = null;
+            }
+        }
     }
 }

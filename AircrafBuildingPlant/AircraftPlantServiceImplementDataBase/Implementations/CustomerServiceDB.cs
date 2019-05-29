@@ -4,7 +4,7 @@ using AircraftBuildingPlantServiceDAL.Interfaces;
 using AircraftBuildingPlantServiceDAL.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Linq; 
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,7 +23,8 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
            CustomerViewModel
             {
                 Id = rec.Id,
-                CustomerFIO = rec.CustomerFIO
+                CustomerFIO = rec.CustomerFIO,
+                Mail = rec.Mail
             })
             .ToList();
             return result;
@@ -36,8 +37,19 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
                 return new CustomerViewModel
                 {
                     Id = element.Id,
-                    CustomerFIO = element.CustomerFIO
-                };
+                    CustomerFIO = element.CustomerFIO,
+                    Mail = element.Mail,
+                    Messages = context.MessageInfos
+ .Where(recM => recM.CustomerId == element.Id)
+.Select(recM => new MessageInfoViewModel
+{
+    MessageId = recM.MessageId,
+    DateDelivery = recM.DateDelivery,
+    Subject = recM.Subject,
+    Body = recM.Body
+})
+.ToList()
+                };
             }
             throw new Exception("Элемент не найден");
         }
@@ -51,7 +63,8 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
             }
             context.Customers.Add(new Customer
             {
-                CustomerFIO = model.CustomerFIO
+                CustomerFIO = model.CustomerFIO,
+                Mail = model.Mail
             });
             context.SaveChanges();
         }
@@ -69,6 +82,7 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
                 throw new Exception("Элемент не найден");
             }
             element.CustomerFIO = model.CustomerFIO;
+            element.Mail = model.Mail;
             context.SaveChanges();
         }
         public void DelElement(int id)
