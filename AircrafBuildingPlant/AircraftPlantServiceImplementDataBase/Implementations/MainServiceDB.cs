@@ -26,6 +26,7 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
                 Id = rec.Id,
                 CustomerId = rec.CustomerId,
                 AircraftId = rec.AircraftId,
+                ExecutorId = rec.ExecutorId,
                 DateCreate = SqlFunctions.DateName("dd", rec.DateCreate) + " " +
             SqlFunctions.DateName("mm", rec.DateCreate) + " " +
             SqlFunctions.DateName("yyyy", rec.DateCreate),
@@ -40,7 +41,8 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
                 Count = rec.Count,
                 Sum = rec.Sum,
                 CustomerFIO = rec.Customer.CustomerFIO,
-                AircraftName = rec.Aircraft.AircraftName
+                AircraftName = rec.Aircraft.AircraftName,
+                ExecutorName = rec.Executor.ExecutorFIO
             })
             .ToList();
             return result;
@@ -105,6 +107,7 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
                            aircraftElement.Element.ElementName + " требуется " + aircraftElement.Count + ", не хватает " + countOnWarehouses);
                          }
                     }
+                    element.ExecutorId = model.ExecutorId;
                     element.DateImplement = DateTime.Now;
                     element.Status = AircraftOrderStatus.Выполняется;
                     context.SaveChanges();
