@@ -26,7 +26,7 @@ namespace AircraftBuildingPlantView
         {
             try
             {
-                var dict = APIClient.GetRequest<List<WarehousesLoadViewModel>>("api/Customer/GetWarehouseLoad");
+                var dict = APIClient.GetRequest<List<WarehousesLoadViewModel>>("api/Replay/GetWarehousesLoad");
                 if (dict != null)
                 {
                     dataGridView1.Rows.Clear();

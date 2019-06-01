@@ -49,9 +49,7 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
         }
         public List<AircraftOrderViewModel> GetFreeOrders()
         {
-            List<AircraftOrderViewModel> result = context.AircraftOrders
-            .Where(x => x.Status == AircraftOrderStatus.Принят || x.Status ==
-           AircraftOrderStatus.НедостаточноРесурсов)
+            List<AircraftOrderViewModel> result = context.AircraftOrders.Where(x => x.Status == AircraftOrderStatus.Принят || x.Status == AircraftOrderStatus.НедостаточноРесурсов)
             .Select(rec => new AircraftOrderViewModel
             {
                 Id = rec.Id
@@ -76,26 +74,23 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
         {
             using (var transaction = context.Database.BeginTransaction())
             {
-                AircraftOrder element = context.AircraftOrders.FirstOrDefault(rec => rec.Id == model.Id);
                 try
                 {
+                    AircraftOrder element = context.AircraftOrders.FirstOrDefault(rec => rec.Id == model.Id);
                     if (element == null)
                     {
                         throw new Exception("Элемент не найден");
                     }
-                    if (element.Status != AircraftOrderStatus.Принят && element.Status !=
-                    AircraftOrderStatus.НедостаточноРесурсов)
+                    if (element.Status != AircraftOrderStatus.Принят && element.Status != AircraftOrderStatus.НедостаточноРесурсов)
                     {
                         throw new Exception("Заказ не в статусе \"Принят\"");
                     }
-                    var aircraftElements = context.AircraftElements.Include(rec =>
-                    rec.Element).Where(rec => rec.AircraftId == element.AircraftId);
+                    var aircraftElements = context.AircraftElements.Include(rec => rec.Element).Where(rec => rec.AircraftId == element.AircraftId);
                     // списываем
                     foreach (var aircraftElement in aircraftElements)
                     {
                         int countOnWarehouses = aircraftElement.Count * element.Count;
-                        var warehouseElements = context.WarehouseElements.Where(rec =>
-                        rec.ElementId == aircraftElement.ElementId);
+                        var warehouseElements = context.WarehouseElements.Where(rec => rec.ElementId == aircraftElement.ElementId);
                         foreach (var warehouseElement in warehouseElements)
                         {
                             // компонентов на одном слкаде может не хватать
@@ -115,25 +110,21 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
                         }
                         if (countOnWarehouses > 0)
                         {
-                            throw new Exception("Не достаточно компонента " +
-                           aircraftElement.Element.ElementName + " требуется " + aircraftElement.Count + ", не хватает " + countOnWarehouses);
-                         }
+                            throw new Exception("Не достаточно компонента " +  aircraftElement.Element.ElementName + " требуется " + aircraftElement.Count + ", не хватает " + countOnWarehouses);
+                        }
                     }
                     element.ExecutorId = model.ExecutorId;
                     element.DateImplement = DateTime.Now;
                     element.Status = AircraftOrderStatus.Выполняется;
                     context.SaveChanges();
-                    SendEmail(element.Customer.Mail, "Оповещение по заказам",
-                    string.Format("Заказ №{0} от {1} передеан в работу", element.Id,
-                    element.DateCreate.ToShortDateString()));
+                    SendEmail(element.Customer.Mail, "Оповещение по заказам", string.Format("Заказ №{0} от {1} передеан в работу", element.Id, element.DateCreate.ToShortDateString()));
+                   
                     transaction.Commit();
                 }
                 catch (Exception)
                 {
                     transaction.Rollback();
-                    element.Status = AircraftOrderStatus.НедостаточноРесурсов;
                     context.SaveChanges();
-                    transaction.Commit();
                     throw;
                 }
             }
@@ -151,8 +142,9 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
             }
             element.Status = AircraftOrderStatus.Готов;
             context.SaveChanges();
-            SendEmail(element.Customer.Mail, "Оповещение по заказам", string.Format("Заказ №{ 0} от { 1}  передан на оплату", element.Id, element.DateCreate.ToShortDateString()));
-        }
+            SendEmail(element.Customer.Mail, "Оповещение по заказам", string.Format("Заказ №{0} от {1}  передан на оплату", element.Id, element.DateCreate.ToShortDateString()));
+        }
+
         public void PayOrder(AircraftOrderBindingModel model)
         {
             AircraftOrder element = context.AircraftOrders.FirstOrDefault(rec => rec.Id == model.Id);
@@ -166,7 +158,7 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
             }
             element.Status = AircraftOrderStatus.Оплачен;
             context.SaveChanges();
-            SendEmail(element.Customer.Mail, "Оповещение по заказам", string.Format("Заказ №{ 0} от { 1} оплачен успешно", element.Id, element.DateCreate.ToShortDateString()));
+            SendEmail(element.Customer.Mail, "Оповещение по заказам", string.Format("Заказ №{0} от {1} оплачен успешно", element.Id, element.DateCreate.ToShortDateString()));
         }
         public void PutElementOnWarehouse(WarehouseElementBindingModel model)
         {
@@ -218,6 +210,6 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
                 objMailMessage = null;
                 objSmtpClient = null;
             }
-        }
+        }
     }
 }
