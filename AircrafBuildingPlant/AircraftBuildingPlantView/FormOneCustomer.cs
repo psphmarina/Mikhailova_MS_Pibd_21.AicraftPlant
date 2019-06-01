@@ -59,7 +59,7 @@ namespace AircraftBuildingPlantView
                MessageBoxIcon.Error);
                 return;
             }
-            string fio = textBoxFIO.Text;
+            string fio = textBoxFIOCustomer.Text;
             string mail = textBoxMail.Text;
             if (!string.IsNullOrEmpty(mail))
             {

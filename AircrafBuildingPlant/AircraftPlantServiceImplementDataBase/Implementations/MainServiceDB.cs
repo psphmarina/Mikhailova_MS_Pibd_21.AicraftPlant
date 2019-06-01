@@ -59,7 +59,7 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
         }
         public void CreateOrder(AircraftOrderBindingModel model)
         {
-            context.AircraftOrders.Add(new AircraftOrder
+            var order = new AircraftOrder
             {
                 CustomerId = model.CustomerId,
                 AircraftId = model.AircraftId,
@@ -67,8 +67,11 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
                 Count = model.Count,
                 Sum = model.Sum,
                 Status = AircraftOrderStatus.Принят
-            });
+            };
+        context.AircraftOrders.Add(order);
             context.SaveChanges();
+            var client = context.Customers.FirstOrDefault(x => x.Id == model.CustomerId);
+            SendEmail(client.Mail, "Оповещение по заказам", string.Format("Заказ №{0} от {1} создан успешно", order.Id, order.DateCreate.ToShortDateString()));
         }
         public void TakeOrderInWork(AircraftOrderBindingModel model)
         {
@@ -203,7 +206,7 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
             finally
             {
