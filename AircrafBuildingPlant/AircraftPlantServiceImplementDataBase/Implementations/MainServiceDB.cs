@@ -71,7 +71,8 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
         context.AircraftOrders.Add(order);
             context.SaveChanges();
             var client = context.Customers.FirstOrDefault(x => x.Id == model.CustomerId);
-            SendEmail(client.Mail, "Оповещение по заказам", string.Format("Заказ №{0} от {1} создан успешно", order.Id, order.DateCreate.ToShortDateString()));
+            SendEmail(client.Mail, "Оповещение по заказам", string.Format("Заказ №{0} от {1} создан успешно", order.Id, order.DateCreate.ToShortDateString()));
+
         }
         public void TakeOrderInWork(AircraftOrderBindingModel model)
         {
