@@ -1,7 +1,10 @@
 ﻿using AircraftBuildingPlantServiceDAL.Interfaces;
 using AircraftBuildingPlantServiceImplementList.Implementations;
+using AircraftPlantServiceImplementDataBase;
+using AircraftPlantServiceImplementDataBase.Implementations;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -28,15 +31,17 @@ namespace AircraftBuildingPlantView
         public static IUnityContainer BuildUnityContainer()
         {
             var currentContainer = new UnityContainer();
-            currentContainer.RegisterType<ICustomertService, CustomerServiceList>(new
+            currentContainer.RegisterType<DbContext, AircraftDbContext>(new
+HierarchicalLifetimeManager());
+            currentContainer.RegisterType<ICustomertService, CustomerServiceDB>(new
             HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IElementService, ElementServiceList>(new
+            currentContainer.RegisterType<IElementService, ElementServiceDB>(new
             HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IAircraftService, AircraftServiceList>(new
+            currentContainer.RegisterType<IAircraftService, AircraftServiceDB>(new
             HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IWarehouseService, WarehouseServiceList>(new
+            currentContainer.RegisterType<IWarehouseService, WarehouseServiceDB>(new
             HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IMainService, MainServiceList>(new
+            currentContainer.RegisterType<IMainService, MainServiceDB>(new
             HierarchicalLifetimeManager());
             return currentContainer;
         }
