@@ -31,7 +31,7 @@ namespace AircraftBuildingPlantView
                 try
                 {
                     CustomerViewModel client = APIClient.GetRequest<CustomerViewModel>("api/Customer/Get/" + id.Value);
-                    textBoxFIO.Text = client.CustomerFIO;
+                    textBoxFIOCustomer.Text = client.CustomerFIO;
                     textBoxMail.Text = client.Mail;
                     dataGridView.DataSource = client.Messages;
                     dataGridView.Columns[0].Visible = false;

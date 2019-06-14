@@ -125,6 +125,7 @@
             this.Controls.Add(this.textBoxFIO);
             this.Name = "FormOneCustomer";
             this.Text = "Клиент";
+            this.Load += new System.EventHandler(this.FormOneCustomer_Load);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
