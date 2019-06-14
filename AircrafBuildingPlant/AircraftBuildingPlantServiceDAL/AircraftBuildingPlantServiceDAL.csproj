@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributies\CustomInterfaceAttribute.cs" />
+    <Compile Include="Attributies\CustomMethodAttribute.cs" />
     <Compile Include="BindingModel\AircraftBindingModel.cs" />
     <Compile Include="BindingModel\AircraftElementBindingModel.cs" />
     <Compile Include="BindingModel\AircraftOrderBindingModel.cs" />
@@ -51,7 +53,6 @@
     <Compile Include="BindingModel\ReplayBindingModel.cs" />
     <Compile Include="BindingModel\WarehouseBindingModel.cs" />
     <Compile Include="BindingModel\WarehouseElementBindingModel.cs" />
-    <Compile Include="Interfaces\IAircraftElementService.cs" />
     <Compile Include="Interfaces\IAircraftService.cs" />
     <Compile Include="Interfaces\ICustomertService.cs" />
     <Compile Include="Interfaces\IElementService.cs" />
