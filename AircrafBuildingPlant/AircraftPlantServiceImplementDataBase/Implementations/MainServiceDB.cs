@@ -197,8 +197,9 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
                 objMailMessage.SubjectEncoding = System.Text.Encoding.UTF8;
                 objMailMessage.BodyEncoding = System.Text.Encoding.UTF8;
                 objSmtpClient = new SmtpClient("smtp.gmail.com", 587);
-                objSmtpClient.UseDefaultCredentials = false;
+                //objSmtpClient.UseDefaultCredentials = false;
                 objSmtpClient.EnableSsl = true;
+                objSmtpClient.TargetName = "STARTTLS/smtp.gmail.com";
                 objSmtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                 objSmtpClient.Credentials = new
                NetworkCredential(ConfigurationManager.AppSettings["MailLogin"],
