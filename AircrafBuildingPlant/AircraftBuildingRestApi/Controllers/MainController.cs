@@ -38,7 +38,7 @@ namespace AircraftBuildingRestApi.Controllers
         }
         [HttpPost]
         public void PayOrder(AircraftOrderBindingModel model)
-        {
+        { 
             _service.PayOrder(model);
         }
         [HttpPost]
