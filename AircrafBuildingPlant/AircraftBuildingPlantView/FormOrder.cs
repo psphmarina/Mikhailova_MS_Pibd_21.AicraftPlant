@@ -116,7 +116,7 @@ IMainService serviceM)
                     CustomerId = Convert.ToInt32(comboBoxCustomer.SelectedValue),
                     AircraftId = Convert.ToInt32(comboBoxAircraft.SelectedValue),
                     Count = Convert.ToInt32(textBoxCount.Text),
-                    Sum = Convert.ToInt32(textBoxSum.Text)
+                    Sum = Convert.ToDecimal(textBoxSum.Text)
                 });
                 MessageBox.Show("Сохранение прошло успешно", "Сообщение",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);

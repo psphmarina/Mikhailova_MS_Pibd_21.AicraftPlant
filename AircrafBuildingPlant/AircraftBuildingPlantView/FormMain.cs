@@ -19,19 +19,21 @@ namespace AircraftBuildingPlantView
     {
         [Dependency]
         public new IUnityContainer Container { get; set; }
-        private readonly IMainService service;
+        private readonly IMainService serviceM;
+        private readonly IReplayService replayService;
 
-        public FormMain(IMainService service)
+        public FormMain(IMainService serviceM, IReplayService replayService)
         {
             InitializeComponent();
-            this.service = service;
+            this.serviceM = serviceM;
+            this.replayService = replayService;
         }
 
         private void LoadData()
         {
             try
             {
-                List<AircraftOrderViewModel> list = service.GetList();
+                List<AircraftOrderViewModel> list = serviceM.GetList();
                 if (list != null)
                 {
                     dataGridView.DataSource = list;
@@ -82,7 +84,7 @@ namespace AircraftBuildingPlantView
                 int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 try
                 {
-                    service.TakeOrderInWork(new AircraftOrderBindingModel { Id = id });
+                    serviceM.TakeOrderInWork(new AircraftOrderBindingModel { Id = id });
                     LoadData();
                 }
                 catch (Exception ex)
@@ -100,7 +102,7 @@ namespace AircraftBuildingPlantView
                 int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 try
                 {
-                    service.FinishOrder(new AircraftOrderBindingModel { Id = id });
+                    serviceM.FinishOrder(new AircraftOrderBindingModel { Id = id });
                     LoadData();
                 }
                 catch (Exception ex)
@@ -118,7 +120,7 @@ namespace AircraftBuildingPlantView
                 int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 try
                 {
-                    service.PayOrder(new AircraftOrderBindingModel { Id = id });
+                    serviceM.PayOrder(new AircraftOrderBindingModel { Id = id });
                     LoadData();
                 }
                 catch (Exception ex)
@@ -163,6 +165,45 @@ namespace AircraftBuildingPlantView
         private void пополнитьСкладToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var form = Container.Resolve<FormPutOnWarehouse>();
+            form.ShowDialog();
+        }
+
+        private void прайсИзделийToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "doc|*.doc|docx|*.docx"
+            };
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    
+                    replayService.SaveAircraftPrice(new ReplayBindingModel
+                    {
+                        FileName = sfd.FileName
+                    });
+                    MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK,
+                   MessageBoxIcon.Error);
+                }
+            } 
+
+        }
+
+        private void загруженностьСкладовToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = Container.Resolve<FormWarehouseLoading>();
+            form.ShowDialog();
+        }
+
+        private void заказыКлиентовToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = Container.Resolve<FormCustomerOrders>();
             form.ShowDialog();
         }
     }

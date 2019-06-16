@@ -1,5 +1,6 @@
-﻿
-using AircraftBuildingPlantModel;
+
+﻿using AircraftBuildingPlantModel;
+
 using AircraftBuildingPlantServiceDAL.BindingModel;
 using AircraftBuildingPlantServiceDAL.Interfaces;
 using AircraftBuildingPlantServiceDAL.ViewModel;
@@ -61,7 +62,8 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
         }
         public void TakeOrderInWork(AircraftOrderBindingModel model)
         {
-            using (var transaction = context.Database.BeginTransaction())
+        using (var transaction = context.Database.BeginTransaction())
+
             {
                 try
                 {
@@ -104,7 +106,8 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
                         {
                             throw new Exception("Не достаточно компонента " +
                            aircraftElement.Element.ElementName + " требуется " + aircraftElement.Count + ", не хватает " + countOnWarehouses);
-                        }
+                         }
+
                     }
                     element.DateImplement = DateTime.Now;
                     element.Status = AircraftOrderStatus.Выполняется;
@@ -122,7 +125,7 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
         {
             AircraftOrder element = context.AircraftOrders.FirstOrDefault(rec => rec.Id == model.Id);
             if (element == null)
-            {
+        {
                 throw new Exception("Элемент не найден");
             }
             if (element.Status != AircraftOrderStatus.Выполняется)

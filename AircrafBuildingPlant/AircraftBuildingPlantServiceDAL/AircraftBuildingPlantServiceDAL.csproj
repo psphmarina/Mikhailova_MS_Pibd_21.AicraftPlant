@@ -46,6 +46,7 @@
     <Compile Include="BindingModel\AircraftOrderStatusBindingModel.cs" />
     <Compile Include="BindingModel\CustomerBindingModel.cs" />
     <Compile Include="BindingModel\ElementBindingModel.cs" />
+    <Compile Include="BindingModel\ReplayBindingModel.cs" />
     <Compile Include="BindingModel\WarehouseBindingModel.cs" />
     <Compile Include="BindingModel\WarehouseElementBindingModel.cs" />
     <Compile Include="Interfaces\IAircraftElementService.cs" />
@@ -53,15 +54,18 @@
     <Compile Include="Interfaces\ICustomertService.cs" />
     <Compile Include="Interfaces\IElementService.cs" />
     <Compile Include="Interfaces\IMainService.cs" />
+    <Compile Include="Interfaces\IReplayService.cs" />
     <Compile Include="Interfaces\IWarehouseService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\AircraftElementViewModel.cs" />
     <Compile Include="ViewModel\AircraftOrderStatusViewModel.cs" />
     <Compile Include="ViewModel\AircraftOrderViewModel.cs" />
     <Compile Include="ViewModel\AircraftViewModel.cs" />
+    <Compile Include="ViewModel\CustomerAircraftOrdersModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="ViewModel\ElementViewModel.cs" />
     <Compile Include="ViewModel\WarehouseElementViewModel.cs" />
+    <Compile Include="ViewModel\WarehousesLoadViewModel.cs" />
     <Compile Include="ViewModel\WarehouseViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +73,9 @@
       <Project>{c944496e-ffec-4737-be24-b11c0daab708}</Project>
       <Name>AircraftBuildingPlantModel</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\DataSources\AircraftBuildingPlantServiceDAL.ViewModel.CustomerAircraftOrdersModel.datasource" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
