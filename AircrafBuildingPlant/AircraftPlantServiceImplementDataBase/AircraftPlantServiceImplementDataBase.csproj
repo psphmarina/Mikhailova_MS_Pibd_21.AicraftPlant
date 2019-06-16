@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{AA0B7F5B-7836-4853-9598-9C4C90D012C6}</ProjectGuid>
-    <OutputType>Library</OutputType>
+e>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AircraftPlantServiceImplementDataBase</RootNamespace>
     <AssemblyName>AircraftPlantServiceImplementDataBase</AssemblyName>
@@ -63,6 +63,7 @@
     <Compile Include="Implementations\CustomerServiceDB.cs" />
     <Compile Include="Implementations\ElementServiceDB.cs" />
     <Compile Include="Implementations\MainServiceDB.cs" />
+
     <Compile Include="Implementations\ReplayServiceDB.cs" />
     <Compile Include="Implementations\WarehouseServiceDB.cs" />
     <Compile Include="Migrations\201903201514514_FirstMigration.cs" />
@@ -92,6 +93,7 @@
       <Name>AircraftBuildingPlantModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\AircraftBuildingPlantServiceDAL\AircraftBuildingPlantServiceDAL.csproj">
+
       <Project>{8ca3fd98-6cf8-4cf0-b849-0393b2acff48}</Project>
       <Name>AircraftBuildingPlantServiceDAL</Name>
     </ProjectReference>
@@ -106,6 +108,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
