@@ -26,5 +26,6 @@ namespace AircraftPlantServiceImplementDataBase
         public virtual DbSet<AircraftElement> AircraftElements { get; set; }
         public virtual DbSet<Warehouse> Warehouses { get; set; }
         public virtual DbSet<WarehouseElement> WarehouseElements { get; set; }
+        public virtual DbSet<MessageInfo> MessageInfos { get; set; }
     }
 }

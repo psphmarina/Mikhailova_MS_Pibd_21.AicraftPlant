@@ -49,6 +49,7 @@ e>Library</OutputType>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -64,6 +65,7 @@ e>Library</OutputType>
     <Compile Include="Implementations\ElementServiceDB.cs" />
     <Compile Include="Implementations\ExecutorServiceDB.cs" />
     <Compile Include="Implementations\MainServiceDB.cs" />
+    <Compile Include="Implementations\MessageInfoServiceDB .cs" />
 
     <Compile Include="Implementations\ReplayServiceDB.cs" />
     <Compile Include="Implementations\WarehouseServiceDB.cs" />
@@ -79,9 +81,17 @@ e>Library</OutputType>
     <Compile Include="Migrations\201905251535461_secmigr.Designer.cs">
       <DependentUpon>201905251535461_secmigr.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201905300935563_SecondMigration.cs" />
-    <Compile Include="Migrations\201905300935563_SecondMigration.Designer.cs">
-      <DependentUpon>201905300935563_SecondMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201905291550102_ThirdMigration.cs" />
+    <Compile Include="Migrations\201905291550102_ThirdMigration.Designer.cs">
+      <DependentUpon>201905291550102_ThirdMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906100852570_ThirdMigration1.cs" />
+    <Compile Include="Migrations\201906100852570_ThirdMigration1.Designer.cs">
+      <DependentUpon>201906100852570_ThirdMigration1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906131049386_ThirdMigration11.cs" />
+    <Compile Include="Migrations\201906131049386_ThirdMigration11.Designer.cs">
+      <DependentUpon>201906131049386_ThirdMigration11.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -117,8 +127,14 @@ e>Library</OutputType>
     <EmbeddedResource Include="Migrations\201905251535461_secmigr.resx">
       <DependentUpon>201905251535461_secmigr.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201905300935563_SecondMigration.resx">
-      <DependentUpon>201905300935563_SecondMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201905291550102_ThirdMigration.resx">
+      <DependentUpon>201905291550102_ThirdMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906100852570_ThirdMigration1.resx">
+      <DependentUpon>201906100852570_ThirdMigration1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906131049386_ThirdMigration11.resx">
+      <DependentUpon>201906131049386_ThirdMigration11.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
