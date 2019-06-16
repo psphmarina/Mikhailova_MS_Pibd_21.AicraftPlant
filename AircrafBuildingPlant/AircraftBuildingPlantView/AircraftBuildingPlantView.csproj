@@ -271,6 +271,7 @@
       <Name>AircraftBuildingPlantServiceImplementList</Name>
     </ProjectReference>
     <ProjectReference Include="..\AircraftPlantServiceImplementDataBase\AircraftPlantServiceImplementDataBase.csproj">
+
       <Project>{aa0b7f5b-7836-4853-9598-9c4c90d012c6}</Project>
       <Name>AircraftPlantServiceImplementDataBase</Name>
     </ProjectReference>
