@@ -42,6 +42,7 @@ namespace AircraftBuildingPlantView
             currentContainer.RegisterType<IWarehouseService, WarehouseServiceDB>(new
             HierarchicalLifetimeManager());
             currentContainer.RegisterType<IReplayService, ReplayServiceDB>(new
+
             HierarchicalLifetimeManager());
             currentContainer.RegisterType<IMainService, MainServiceDB>(new
             HierarchicalLifetimeManager());

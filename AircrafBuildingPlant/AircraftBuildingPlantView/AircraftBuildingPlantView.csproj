@@ -59,6 +59,7 @@
     <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.1016.290\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
+
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -251,6 +252,7 @@
       <Name>AircraftBuildingPlantServiceImplementList</Name>
     </ProjectReference>
     <ProjectReference Include="..\AircraftPlantServiceImplementDataBase\AircraftPlantServiceImplementDataBase.csproj">
+
       <Project>{aa0b7f5b-7836-4853-9598-9c4c90d012c6}</Project>
       <Name>AircraftPlantServiceImplementDataBase</Name>
     </ProjectReference>
