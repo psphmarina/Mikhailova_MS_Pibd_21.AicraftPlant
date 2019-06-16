@@ -1,3 +1,4 @@
+
 ﻿using AircraftBuildingPlantModel;
 using AircraftBuildingPlantServiceDAL.BindingModel;
 using AircraftBuildingPlantServiceDAL.Interfaces;
@@ -218,3 +219,4 @@ namespace AircraftPlantServiceImplementDataBase.Implementations
         }
     }
 }
+
