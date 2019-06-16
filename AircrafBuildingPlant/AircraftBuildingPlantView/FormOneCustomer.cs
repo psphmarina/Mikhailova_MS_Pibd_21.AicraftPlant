@@ -11,22 +11,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Unity;
 
-namespace AircraftPlantView
+namespace AircraftBuildingPlantView
 {
     public partial class FormOneCustomer : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
         public int Id { set { id = value; } }
-        private readonly ICustomertService service;
         private int? id;
 
-        public FormOneCustomer(ICustomertService service)
+        public FormOneCustomer()
         {
             InitializeComponent();
-            this.service = service;
         }
         private void FormOneCustomer_Load(object sender, EventArgs e)
         {
@@ -34,11 +29,9 @@ namespace AircraftPlantView
             {
                 try
                 {
-                    CustomerViewModel view = service.GetElement(id.Value);
-                    if (view != null)
-                    {
-                        textBoxFIOCustomer.Text = view.CustomerFIO;
-                    }
+                    CustomerViewModel client =
+                    APIClient.GetRequest<CustomerViewModel>("api/Customer/Get/" + id.Value);
+                    textBoxFIOCustomer.Text = client.CustomerFIO;
                 }
                 catch (Exception ex)
                 {
@@ -59,7 +52,8 @@ namespace AircraftPlantView
             {
                 if (id.HasValue)
                 {
-                    service.UpdElement(new CustomerBindingModel
+                    APIClient.PostRequest<CustomerBindingModel,
+                    bool>("api/Customer/UpdElement", new CustomerBindingModel
                     {
                         Id = id.Value,
                         CustomerFIO = textBoxFIOCustomer.Text
@@ -67,7 +61,8 @@ namespace AircraftPlantView
                 }
                 else
                 {
-                    service.AddElement(new CustomerBindingModel
+                    APIClient.PostRequest<CustomerBindingModel,
+                    bool>("api/Customer/AddElement", new CustomerBindingModel
                     {
                         CustomerFIO = textBoxFIOCustomer.Text
                     });

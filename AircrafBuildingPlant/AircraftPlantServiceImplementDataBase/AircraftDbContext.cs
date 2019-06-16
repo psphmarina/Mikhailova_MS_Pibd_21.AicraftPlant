@@ -10,7 +10,7 @@ namespace AircraftPlantServiceImplementDataBase
 {
     public class AircraftDbContext : DbContext
     {
-        public AircraftDbContext() : base("AbstractDatabase")
+        public AircraftDbContext() : base("AircraftDatabase")
         {
             //настройки конфигурации для entity
             Configuration.ProxyCreationEnabled = false;
@@ -19,6 +19,7 @@ namespace AircraftPlantServiceImplementDataBase
            System.Data.Entity.SqlServer.SqlProviderServices.Instance;
         }
         public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<Executor> Executors { get; set; }
         public virtual DbSet<Element> Elements { get; set; }
         public virtual DbSet<AircraftOrder> AircraftOrders { get; set; }
         public virtual DbSet<Aircraft> Aircrafts { get; set; }

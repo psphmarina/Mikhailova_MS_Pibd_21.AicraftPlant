@@ -1,4 +1,5 @@
-﻿using AircraftBuildingPlantServiceDAL.Interfaces;
+﻿using AircraftBuildingPlantServiceDAL.BindingModel;
+using AircraftBuildingPlantServiceDAL.Interfaces;
 using AircraftBuildingPlantServiceDAL.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -9,20 +10,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Unity;
-
 namespace AircraftBuildingPlantView
 {
     public partial class FormElements : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
-        private readonly IElementService service;
-
-        public FormElements(IElementService service)
+        public FormElements()
         {
             InitializeComponent();
-            this.service = service;
         }
         private void FormElements_Load(object sender, EventArgs e)
         {
@@ -32,7 +26,7 @@ namespace AircraftBuildingPlantView
         {
             try
             {
-                List<ElementViewModel> list = service.GetList();
+                List<ElementViewModel> list = APIClient.GetRequest<List<ElementViewModel>>("api/Element/GetList");
                 if (list != null)
                 {
                     dataGridView1.DataSource = list;
@@ -50,7 +44,7 @@ namespace AircraftBuildingPlantView
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormElement>();
+            var form = new FormElement();
             if (form.ShowDialog() == DialogResult.OK)
             {
                 LoadData();
@@ -61,7 +55,7 @@ namespace AircraftBuildingPlantView
         {
             if (dataGridView1.SelectedRows.Count == 1)
             {
-                var form = Container.Resolve<FormElement>();
+                var form = new FormElement();
                 form.Id = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
@@ -81,7 +75,8 @@ namespace AircraftBuildingPlantView
                     Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
                     try
                     {
-                        service.DelElement(id);
+                        APIClient.PostRequest<ElementBindingModel,
+                        bool>("api/Element/DelElement", new ElementBindingModel { Id = id });
                     }
                     catch (Exception ex)
                     {

@@ -11,22 +11,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Unity;
 
 namespace AircraftBuildingPlantView
 {
     public partial class FormWarehouse : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
+        
         public int Id { set { id = value; } }
-        private readonly IWarehouseService service;
         private int? id;
 
-        public FormWarehouse(IWarehouseService service)
+        public FormWarehouse()
         {
             InitializeComponent();
-            this.service = service;
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
@@ -41,7 +37,8 @@ namespace AircraftBuildingPlantView
             {
                 if (id.HasValue)
                 {
-                    service.UpdElement(new WarehouseBindingModel
+                   // service.UpdElement(new WarehouseBindingModel
+                    APIClient.PostRequest<WarehouseBindingModel, bool>("api/Warehouse/UpdElement", new WarehouseBindingModel
                     {
                         Id = id.Value,
                         WarehouseName = textBoxName.Text
@@ -49,7 +46,7 @@ namespace AircraftBuildingPlantView
                 }
                 else
                 {
-                    service.AddElement(new WarehouseBindingModel
+                    APIClient.PostRequest<WarehouseBindingModel, bool>("api/Warehouse/AddElement", new WarehouseBindingModel
                     {
                         WarehouseName = textBoxName.Text
                     });
@@ -77,7 +74,7 @@ namespace AircraftBuildingPlantView
             {
                 try
                 {
-                    WarehouseViewModel view = service.GetElement(id.Value);
+                    WarehouseViewModel view = APIClient.GetRequest<WarehouseViewModel>("api/Warehouse/Get/" + id.Value);
                     if (view != null)
                     {
                         textBoxName.Text = view.WarehouseName;

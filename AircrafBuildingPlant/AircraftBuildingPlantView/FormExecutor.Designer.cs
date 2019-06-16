@@ -1,6 +1,6 @@
 ﻿namespace AircraftBuildingPlantView
 {
-    partial class FormOneCustomer
+    partial class FormExecutor
     {
         /// <summary>
         /// Required designer variable.
@@ -28,34 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBoxFIO = new System.Windows.Forms.TextBox();
-            this.textBoxFIOCustomer = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBoxName = new System.Windows.Forms.TextBox();
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // textBoxFIO
+            // label1
             // 
-            this.textBoxFIO.Enabled = false;
-            this.textBoxFIO.Location = new System.Drawing.Point(9, 22);
-            this.textBoxFIO.Name = "textBoxFIO";
-            this.textBoxFIO.ReadOnly = true;
-            this.textBoxFIO.Size = new System.Drawing.Size(70, 20);
-            this.textBoxFIO.TabIndex = 0;
-            this.textBoxFIO.Text = "ФИО";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(16, 32);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(32, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Имя:";
             // 
-            // textBoxFIOCustomer
+            // textBoxName
             // 
-            this.textBoxFIOCustomer.Location = new System.Drawing.Point(93, 23);
-            this.textBoxFIOCustomer.Name = "textBoxFIOCustomer";
-            this.textBoxFIOCustomer.Size = new System.Drawing.Size(247, 20);
-            this.textBoxFIOCustomer.TabIndex = 1;
+            this.textBoxName.Location = new System.Drawing.Point(82, 32);
+            this.textBoxName.Name = "textBoxName";
+            this.textBoxName.Size = new System.Drawing.Size(252, 20);
+            this.textBoxName.TabIndex = 1;
             // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(45, 63);
+            this.buttonSave.Location = new System.Drawing.Point(25, 77);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(112, 26);
+            this.buttonSave.Size = new System.Drawing.Size(127, 20);
             this.buttonSave.TabIndex = 2;
             this.buttonSave.Text = "Сохранить";
             this.buttonSave.UseVisualStyleBackColor = true;
@@ -63,25 +62,25 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(181, 62);
+            this.buttonCancel.Location = new System.Drawing.Point(257, 77);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(114, 26);
+            this.buttonCancel.Size = new System.Drawing.Size(96, 20);
             this.buttonCancel.TabIndex = 3;
             this.buttonCancel.Text = "Отмена";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
-            // FormOneCustomer
+            // FormExecutor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(350, 103);
+            this.ClientSize = new System.Drawing.Size(386, 127);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonSave);
-            this.Controls.Add(this.textBoxFIOCustomer);
-            this.Controls.Add(this.textBoxFIO);
-            this.Name = "FormOneCustomer";
-            this.Text = "Клиент";
+            this.Controls.Add(this.textBoxName);
+            this.Controls.Add(this.label1);
+            this.Name = "FormExecutor";
+            this.Text = "Исполнитель";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -89,8 +88,8 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBoxFIO;
-        private System.Windows.Forms.TextBox textBoxFIOCustomer;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBoxName;
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.Button buttonCancel;
     }

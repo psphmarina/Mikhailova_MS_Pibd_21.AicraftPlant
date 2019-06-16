@@ -1,8 +1,5 @@
-﻿
-using AircraftBuildingPlantServiceDAL.BindingModel;
-using AircraftBuildingPlantServiceDAL.Interfaces;
+﻿using AircraftBuildingPlantServiceDAL.BindingModel;
 using AircraftBuildingPlantServiceDAL.ViewModel;
-using AircraftBuildingPlantView;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,33 +10,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AircraftPlantView
+namespace AircraftBuildingPlantView
 {
-    public partial class FormCustomer : Form
+    public partial class FormExecutors : Form
     {
-        
-
-        public FormCustomer()
+        public FormExecutors()
         {
             InitializeComponent();
         }
-
-        private void FormCustomers_Load(object sender, EventArgs e)
-        {
-            LoadData();
-        }
-
         private void LoadData()
         {
             try
             {
-                List<CustomerViewModel> list =
-                APIClient.GetRequest<List<CustomerViewModel>>("api/Customer/GetList");
+                List<ExecutorViewModel> list = APIClient.GetRequest<List<ExecutorViewModel>>("api/Executor/GetList");
                 if (list != null)
                 {
-                    dataGridViewCustomer.DataSource = list;
-                    dataGridViewCustomer.Columns[0].Visible = false;
-                    dataGridViewCustomer.Columns[1].AutoSizeMode =
+                    dataGridView1.DataSource = list;
+                    dataGridView1.Columns[0].Visible = false;
+                    dataGridView1.Columns[1].AutoSizeMode =
                     DataGridViewAutoSizeColumnMode.Fill;
                 }
             }
@@ -49,10 +37,9 @@ namespace AircraftPlantView
                 MessageBoxIcon.Error);
             }
         }
-
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            var form = new FormOneCustomer();
+            var form = new FormExecutor();
             if (form.ShowDialog() == DialogResult.OK)
             {
                 LoadData();
@@ -61,11 +48,10 @@ namespace AircraftPlantView
 
         private void buttonChange_Click(object sender, EventArgs e)
         {
-            if (dataGridViewCustomer.SelectedRows.Count == 1) { 
-                var form = new FormOneCustomer
-                {
-                    Id = Convert.ToInt32(dataGridViewCustomer.SelectedRows[0].Cells[0].Value)
-                };
+            if (dataGridView1.SelectedRows.Count == 1)
+            {
+                var form = new FormExecutor();
+                form.Id = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
                     LoadData();
@@ -75,17 +61,17 @@ namespace AircraftPlantView
 
         private void buttonDel_Click(object sender, EventArgs e)
         {
-            if (dataGridViewCustomer.SelectedRows.Count == 1)
+            if (dataGridView1.SelectedRows.Count == 1)
             {
                 if (MessageBox.Show("Удалить запись", "Вопрос", MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     int id =
-                    Convert.ToInt32(dataGridViewCustomer.SelectedRows[0].Cells[0].Value);
+                    Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
                     try
                     {
-                        APIClient.PostRequest<CustomerBindingModel,
-                        bool>("api/Customer/DelElement", new CustomerBindingModel { Id = id });
+                        APIClient.PostRequest<ExecutorBindingModel,
+                        bool>("api/Executor/DelElement", new ExecutorBindingModel { Id = id });
                     }
                     catch (Exception ex)
                     {
@@ -97,7 +83,11 @@ namespace AircraftPlantView
             }
         }
 
-        private void buttonUpdate_Click(object sender, EventArgs e)
+        private void buttonUpd_Click(object sender, EventArgs e)
+        {
+            LoadData();
+        }
+        private void FormExecutors_Load(object sender, EventArgs e)
         {
             LoadData();
         }

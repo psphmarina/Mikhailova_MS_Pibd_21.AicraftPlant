@@ -1,6 +1,7 @@
 ﻿
 using AircraftBuildingPlantServiceDAL.Interfaces;
 using AircraftBuildingPlantServiceDAL.ViewModel;
+using AircraftBuildingPlantView;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,36 +11,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Unity;
 
 namespace AircraftPlantView
 {
     public partial class FormAircraftElement : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
+        
         public AircraftElementViewModel Model
         {
             set { model = value; }
-            get
-            {
-                return model;
-            }
+            get { return model;  }
         }
-        private readonly IElementService service;
         private AircraftElementViewModel model;
 
-        public FormAircraftElement(IElementService service)
+        public FormAircraftElement()
         {
             InitializeComponent();
-            this.service = service;
         }
 
         private void FormAircraftElement_Load(object sender, EventArgs e)
         {
             try
             {
-                List<ElementViewModel> list = service.GetList();
+                List<ElementViewModel> list = APIClient.GetRequest<List<ElementViewModel>>("api/Element/GetList");
                 if (list != null)
                 {
                     comboBoxElement.DisplayMember = "ElementName";

@@ -62,6 +62,7 @@ e>Library</OutputType>
     <Compile Include="Implementations\AircraftServiceDB.cs" />
     <Compile Include="Implementations\CustomerServiceDB.cs" />
     <Compile Include="Implementations\ElementServiceDB.cs" />
+    <Compile Include="Implementations\ExecutorServiceDB.cs" />
     <Compile Include="Implementations\MainServiceDB.cs" />
 
     <Compile Include="Implementations\ReplayServiceDB.cs" />
@@ -73,6 +74,14 @@ e>Library</OutputType>
     <Compile Include="Migrations\201904060424231_FirstMigration1.cs" />
     <Compile Include="Migrations\201904060424231_FirstMigration1.Designer.cs">
       <DependentUpon>201904060424231_FirstMigration1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905251535461_secmigr.cs" />
+    <Compile Include="Migrations\201905251535461_secmigr.Designer.cs">
+      <DependentUpon>201905251535461_secmigr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905300935563_SecondMigration.cs" />
+    <Compile Include="Migrations\201905300935563_SecondMigration.Designer.cs">
+      <DependentUpon>201905300935563_SecondMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -104,6 +113,12 @@ e>Library</OutputType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904060424231_FirstMigration1.resx">
       <DependentUpon>201904060424231_FirstMigration1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905251535461_secmigr.resx">
+      <DependentUpon>201905251535461_secmigr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905300935563_SecondMigration.resx">
+      <DependentUpon>201905300935563_SecondMigration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

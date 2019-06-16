@@ -1,5 +1,6 @@
 ﻿using AircraftBuildingPlantServiceDAL.BindingModel;
 using AircraftBuildingPlantServiceDAL.Interfaces;
+using AircraftBuildingPlantServiceDAL.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,27 +10,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Unity;
 
 namespace AircraftBuildingPlantView
 {
     public partial class FormWarehouseLoading : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
-        private readonly IReplayService service;
+        
 
-        public FormWarehouseLoading(IReplayService service)
+        public FormWarehouseLoading()
         {
             InitializeComponent();
-            this.service = service;
         }
 
         private void FormWarehousesLoading_Load(object sender, EventArgs e)
         {
             try
             {
-                var dict = service.GetWarehousesLoad();
+                var dict = APIClient.GetRequest<List<WarehousesLoadViewModel>>("api/Customer/GetWarehouseLoad");
                 if (dict != null)
                 {
                     dataGridView1.Rows.Clear();
@@ -64,7 +61,8 @@ listElem.Item2 });
             {
                 try
                 {
-                    service.SaveWarehousesLoad(new ReplayBindingModel
+                    //service.SaveWarehousesLoad(new ReplayBindingModel
+                    APIClient.PostRequest<ReplayBindingModel, bool>("api/Replay/SaveWarehousesLoad", new ReplayBindingModel
                     {
                         FileName = sfd.FileName
                     });

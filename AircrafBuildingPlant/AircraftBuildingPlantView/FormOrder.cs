@@ -2,6 +2,7 @@
 using AircraftBuildingPlantServiceDAL.BindingModel;
 using AircraftBuildingPlantServiceDAL.Interfaces;
 using AircraftBuildingPlantServiceDAL.ViewModel;
+using AircraftBuildingPlantView;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,32 +12,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Unity;
 
 namespace AircraftPlantView
 {
     public partial class FormOrder : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
-        private readonly ICustomertService serviceC;
-        private readonly IAircraftService serviceP;
-        private readonly IMainService serviceM;
+        
 
-        public FormOrder(ICustomertService serviceC, IAircraftService serviceP,
-IMainService serviceM)
+        public FormOrder()
         {
             InitializeComponent();
-            this.serviceC = serviceC;
-            this.serviceP = serviceP;
-            this.serviceM = serviceM;
         }
 
         private void FormOrder_Load(object sender, EventArgs e)
         {
             try
             {
-                List<CustomerViewModel> listC = serviceC.GetList();
+                List<CustomerViewModel> listC = APIClient.GetRequest<List<CustomerViewModel>>("api/Customer/GetList");
                 if (listC != null)
                 {
                     comboBoxCustomer.DisplayMember = "CustomerFIO";
@@ -44,7 +36,7 @@ IMainService serviceM)
                     comboBoxCustomer.DataSource = listC;
                     comboBoxCustomer.SelectedItem = null; 
                 } 
-                List<AircraftViewModel> listP = serviceP.GetList();
+                List<AircraftViewModel> listP = APIClient.GetRequest<List<AircraftViewModel>>("api/Aircraft/GetList");
                 if (listP != null)
                 {
                     comboBoxAircraft.DisplayMember = "AircraftName";
@@ -68,7 +60,7 @@ IMainService serviceM)
                 try
                 {
                     int id = Convert.ToInt32(comboBoxAircraft.SelectedValue);
-                    AircraftViewModel product = serviceP.GetElement(id);
+                    AircraftViewModel product = APIClient.GetRequest<AircraftViewModel>("api/Aircraft/Get/" + id);
                     int count = Convert.ToInt32(textBoxCount.Text);
                     textBoxSum.Text = (count * product.Price).ToString();
                 }
@@ -111,7 +103,7 @@ IMainService serviceM)
             }
             try
             {
-                serviceM.CreateOrder(new AircraftOrderBindingModel
+                APIClient.PostRequest<AircraftOrderBindingModel, bool>("api/Main/CreateOrder", new AircraftOrderBindingModel
                 {
                     CustomerId = Convert.ToInt32(comboBoxCustomer.SelectedValue),
                     AircraftId = Convert.ToInt32(comboBoxAircraft.SelectedValue),

@@ -154,5 +154,10 @@ namespace AircraftBuildingPlantServiceImplementList.Implementations
                 });
             }
         }
+
+        public List<AircraftOrderViewModel> GetFreeOrders()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
